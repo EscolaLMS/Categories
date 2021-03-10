@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "71bf0f31a3ded51153ed5a2ce8a4ea43",
+    "content-hash": "e645bda3d2ee5d509653ac3593693bac",
     "packages": [
         {
             "name": "bensampo/laravel-enum",
@@ -438,16 +438,16 @@
         },
         {
             "name": "escolalms/core",
-            "version": "dev-develop",
+            "version": "0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EscolaLMS/Core.git",
-                "reference": "390ccd8fd3904ab1898168bc420595393257dec1"
+                "reference": "66335b74b90621f6b123acd11396228c27024fae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EscolaLMS/Core/zipball/390ccd8fd3904ab1898168bc420595393257dec1",
-                "reference": "390ccd8fd3904ab1898168bc420595393257dec1",
+                "url": "https://api.github.com/repos/EscolaLMS/Core/zipball/66335b74b90621f6b123acd11396228c27024fae",
+                "reference": "66335b74b90621f6b123acd11396228c27024fae",
                 "shasum": ""
             },
             "require": {
@@ -461,7 +461,7 @@
                 "orchestra/testbench": "^6.0",
                 "phpunit/phpunit": "^9.0"
             },
-            "type": "project",
+            "type": "package",
             "extra": {
                 "laravel": {
                     "providers": [
@@ -476,6 +476,7 @@
                     "Database\\Factories\\EscolaLms\\Core\\Models\\": "database/factories"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -486,11 +487,7 @@
                 }
             ],
             "description": "Escola Headless LMS",
-            "support": {
-                "source": "https://github.com/EscolaLMS/Core/tree/develop",
-                "issues": "https://github.com/EscolaLMS/Core/issues"
-            },
-            "time": "2021-03-09T16:41:55+00:00"
+            "time": "2021-03-10T09:06:07+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -5051,16 +5048,16 @@
         },
         {
             "name": "orchestra/testbench-core",
-            "version": "v6.17.0",
+            "version": "v6.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orchestral/testbench-core.git",
-                "reference": "a82d3dc04d07620bbddef1dae3cbc105f7ce0181"
+                "reference": "a5dc831264d4192954ea5abb9f4323e286429b3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/a82d3dc04d07620bbddef1dae3cbc105f7ce0181",
-                "reference": "a82d3dc04d07620bbddef1dae3cbc105f7ce0181",
+                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/a5dc831264d4192954ea5abb9f4323e286429b3d",
+                "reference": "a5dc831264d4192954ea5abb9f4323e286429b3d",
                 "shasum": ""
             },
             "require": {
@@ -5123,7 +5120,7 @@
                 "orchestral",
                 "testing"
             ],
-            "time": "2021-03-08T02:29:54+00:00"
+            "time": "2021-03-09T22:59:25+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -6688,16 +6685,16 @@
         },
         {
             "name": "spatie/laravel-ray",
-            "version": "1.14.0",
+            "version": "1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-ray.git",
-                "reference": "b70f3cfb0a3a06c2fcd3a1974d6ca7cba3204504"
+                "reference": "6db166bbfa7c7fab14b24d7b40f1677a27630bcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-ray/zipball/b70f3cfb0a3a06c2fcd3a1974d6ca7cba3204504",
-                "reference": "b70f3cfb0a3a06c2fcd3a1974d6ca7cba3204504",
+                "url": "https://api.github.com/repos/spatie/laravel-ray/zipball/6db166bbfa7c7fab14b24d7b40f1677a27630bcf",
+                "reference": "6db166bbfa7c7fab14b24d7b40f1677a27630bcf",
                 "shasum": ""
             },
             "require": {
@@ -6750,7 +6747,7 @@
                 "laravel-ray",
                 "spatie"
             ],
-            "time": "2021-03-04T11:11:21+00:00"
+            "time": "2021-03-09T16:53:08+00:00"
         },
         {
             "name": "spatie/macroable",
@@ -7177,9 +7174,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "escolalms/core": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

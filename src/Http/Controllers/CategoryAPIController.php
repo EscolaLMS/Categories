@@ -2,11 +2,14 @@
 
 namespace EscolaLms\Categories\Http\Controllers;
 
+use EscolaLms\Categories\Dtos\CategoryCreateDto;
+use EscolaLms\Categories\Http\Requests\CategoryUpdateRequest;
 use EscolaLms\Categories\Http\Resources\CategoryResource;
 use EscolaLms\Categories\Http\Resources\CategoryTreeResource;
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Http\Controllers\Swagger\CategorySwagger;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
+use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,10 +17,12 @@ use Illuminate\Http\Request;
 class CategoryAPIController extends EscolaLmsBaseController implements CategorySwagger
 {
     private CategoriesRepositoryContract $categoryRepository;
+    private CategoryServiceContracts $categoryService;
 
-    public function __construct(CategoriesRepositoryContract $categoryRepository)
+    public function __construct(CategoriesRepositoryContract $categoryRepository, CategoryServiceContracts $categoryService)
     {
         $this->categoryRepository = $categoryRepository;
+        $this->categoryService = $categoryService;
     }
 
     /**
@@ -51,12 +56,62 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
 
     /**
      * Display the specified category.
-     * GET|HEAD /categories/{id}
+     * GET|HEAD /categories/{category}
      *
+     * @param Category $category
      * @return JsonResponse
      */
     public function show(Category $category): JsonResponse
     {
         return (new CategoryResource($category))->response();
+    }
+
+    /**
+     * Destroy the specified category
+     * DELETE|HEAD /categories/{id}
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $this->categoryService->delete($id);
+
+        return response()->json(null, 204);
+    }
+
+    /**
+     * Update the specified category
+     * PUT|HEAD /categories/{category}
+     *
+     * @param Category $category
+     * @param CategoryUpdateRequest $request
+     * @return JsonResponse
+     */
+    public function update(Category $category, CategoryUpdateRequest $request): JsonResponse
+    {
+//        $category = Category::findOrFail($id);
+        $categoryDto = new CategoryCreateDto(
+            $category->getKey(),
+            $request->input('name'),
+            $request->file('icon'),
+            $request->input('icon_class'),
+            $request->boolean('is_active'),
+            $request->input('parent_id')
+        );
+        $this->categoryService->save($categoryDto);
+        return new JsonResponse(['success' => true], 200);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function create(Request $request): JsonResponse
+    {
+        $success = true;
+        $categoryDto = CategoryCreateDto::instantiateFromRequest($request);
+        $this->categoryService->save($categoryDto);
+        return new JsonResponse(['success' => $success], $success ? 200 : 422);
     }
 }

@@ -43,6 +43,10 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
         return CategoryResource::collection($categories)->response();
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function tree(Request $request): JsonResponse
     {
         $categories = $this->categoryRepository->allRoots(
@@ -77,7 +81,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     {
         $this->categoryService->delete($id);
 
-        return response()->json(null, 204);
+        return response()->json(null, 200);
     }
 
     /**
@@ -90,7 +94,6 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
      */
     public function update(Category $category, CategoryUpdateRequest $request): JsonResponse
     {
-//        $category = Category::findOrFail($id);
         $categoryDto = new CategoryCreateDto(
             $category->getKey(),
             $request->input('name'),
@@ -99,19 +102,21 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
             $request->boolean('is_active'),
             $request->input('parent_id')
         );
-        $this->categoryService->save($categoryDto);
-        return new JsonResponse(['success' => true], 200);
+        $success = (bool)$this->categoryService->save($categoryDto);
+        return new JsonResponse(['success' => $success], $success ? 200 : 422);
     }
 
     /**
+     * Create the specified category
+     * POST|HEAD /categories/{category}
+     *
      * @param Request $request
      * @return JsonResponse
      */
     public function create(Request $request): JsonResponse
     {
-        $success = true;
         $categoryDto = CategoryCreateDto::instantiateFromRequest($request);
-        $this->categoryService->save($categoryDto);
+        $success = (bool)$this->categoryService->save($categoryDto);
         return new JsonResponse(['success' => $success], $success ? 200 : 422);
     }
 }

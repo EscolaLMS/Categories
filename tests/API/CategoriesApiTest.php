@@ -35,7 +35,23 @@ class CategoriesApiTest extends TestCase
             'icon_class' => 'fa-business-time',
             'is_active' => true
         ]);
-        dd($this->response);
+        $this->response->assertOk();
+    }
+
+    public function testCategoryCreate(): void
+    {
+        $this->response = $this->json('POST', '/api/categories', [
+            'name' => 'Category 123',
+            'icon_class' => 'fa-business-time',
+            'is_active' => true
+        ]);
+        $this->response->assertOk();
+    }
+
+    public function testCategoryDestroy(): void
+    {
+        $category = Category::factory()->create();
+        $this->response = $this->json('DELETE', '/api/categories/' . $category->getKey());
         $this->response->assertOk();
     }
 }

@@ -33,7 +33,7 @@ class CategoriesApiTest extends TestCase
 
     public function testCategoryUpdate(): void
     {
-        $user = User::where(['email' => 'test@test.test'])->first();
+        $user = User::factory(['email' => 'category@email.com'])->make();
         Passport::actingAs($user, ['categories']);
 
         $category = Category::factory()->create();
@@ -47,7 +47,7 @@ class CategoriesApiTest extends TestCase
 
     public function testCategoryCreate(): void
     {
-        $user = User::where(['email' => 'test@test.test'])->first();
+        $user = User::factory(['email' => 'category@email.com'])->make();
         Passport::actingAs($user, ['categories']);
 
         $this->response = $this->json('POST', '/api/categories', [
@@ -60,7 +60,7 @@ class CategoriesApiTest extends TestCase
 
     public function testCategoryDestroy(): void
     {
-        $user = User::where(['email' => 'test@test.test'])->first();
+        $user = User::factory(['email' => 'category@email.com'])->make();
         Passport::actingAs($user, ['categories']);
 
         $category = Category::factory()->create();

@@ -8,7 +8,9 @@ Route::group(['prefix' => 'api/categories'], function () {
     Route::get('tree', [CategoryAPIController::class, 'tree']);
     Route::get('{category}', [CategoryAPIController::class, 'show']);
 
-    Route::post('/', [CategoryAPIController::class, 'create']);
-    Route::delete('{id}', [CategoryAPIController::class, 'destroy']);
-    Route::put('{category}', [CategoryAPIController::class, 'update']);
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/', [CategoryAPIController::class, 'create']);
+        Route::delete('{id}', [CategoryAPIController::class, 'destroy']);
+        Route::put('{category}', [CategoryAPIController::class, 'update']);
+    });
 });

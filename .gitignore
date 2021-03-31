@@ -1,1 +1,6 @@
 /vendor
+
+.idea
+.DS_Store
+/src/.DS_Store
+/Http/.DS_Store

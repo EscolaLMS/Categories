@@ -21,6 +21,7 @@ class CreateCategoriesTable extends Migration
             $table->boolean('is_active')->default(true);
             $table->unsignedInteger('parent_id')->nullable();
             $table->string('icon')->nullable();
+            $table->string('icon_class')->nullable();
             $table->timestamps();
 
             $table->foreign('parent_id')->references('id')->on('categories');

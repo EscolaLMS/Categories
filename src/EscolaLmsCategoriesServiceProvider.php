@@ -7,6 +7,7 @@ use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
 use EscolaLms\Categories\Services\CategoryService;
 use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
 use EscolaLms\Core\Providers\Injectable;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
 
 class EscolaLmsCategoriesServiceProvider extends ServiceProvider
@@ -27,5 +28,7 @@ class EscolaLmsCategoriesServiceProvider extends ServiceProvider
     {
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $router = $this->app['router'];
+        $router->aliasMiddleware('role', \Spatie\Permission\Middlewares\RoleMiddleware::class);
     }
 }

@@ -28,7 +28,6 @@ class EscolaLmsCategoriesServiceProvider extends ServiceProvider
     {
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $router = $this->app['router'];
-        $router->aliasMiddleware('role', \Spatie\Permission\Middlewares\RoleMiddleware::class);
+        $this->app['router']->aliasMiddleware('role', \Spatie\Permission\Middlewares\RoleMiddleware::class);
     }
 }

@@ -4,9 +4,6 @@ namespace EscolaLms\Categories\Tests\API;
 
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Tests\TestCase;
-use EscolaLms\Core\Models\User;
-use Laravel\Passport\Passport;
-use Spatie\Permission\Models\Role;
 
 
 class CategoriesApiTest extends TestCase

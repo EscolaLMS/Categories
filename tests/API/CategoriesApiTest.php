@@ -10,7 +10,6 @@ use Laravel\Passport\Passport;
 
 class CategoriesApiTest extends TestCase
 {
-
     public function testCategoriesIndex(): void
     {
         $this->response = $this->json('GET', '/api/categories');
@@ -34,23 +33,41 @@ class CategoriesApiTest extends TestCase
     public function testCategoryUpdate(): void
     {
         $user = User::factory(['email' => 'category@email.com'])->make();
-        Passport::actingAs($user, ['categories']);
-
         $category = Category::factory()->create();
-        $this->response = $this->startSession()->json('PUT', '/api/categories/' . $category->getKey(), [
+
+        $this->response = $this->actingAs($user, 'api')->json('PUT', '/api/categories/' . $category->getKey(), [
             'name' => 'Category 123',
             'icon_class' => 'fa-business-time',
             'is_active' => true
         ]);
-        $this->response->assertOk();
+        $this->response->assertForbidden();
     }
 
     public function testCategoryCreate(): void
     {
         $user = User::factory(['email' => 'category@email.com'])->make();
-        Passport::actingAs($user, ['categories']);
+        $this->response = $this->actingAs($user, 'api')->json('POST', '/api/categories', [
+            'name' => 'Category 123',
+            'icon_class' => 'fa-business-time',
+            'is_active' => true
+        ]);
+        $this->response->assertForbidden();
+    }
 
-        $this->response = $this->json('POST', '/api/categories', [
+    public function testCategoryDestroy(): void
+    {
+        $user = User::factory(['email' => 'category@email.com'])->make();
+        $category = Category::factory()->create();
+        $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/categories/' . $category->getKey());
+        $this->response->assertForbidden();
+    }
+
+    public function testCategoryUpdateUserAdmin(): void
+    {
+        $user = config('auth.providers.users.model')::factory()->create();
+        $user->assignRole('admin');
+        $category = Category::factory()->create();
+        $this->response = $this->actingAs($user, 'api')->json('PUT', '/api/categories/' . $category->getKey(), [
             'name' => 'Category 123',
             'icon_class' => 'fa-business-time',
             'is_active' => true
@@ -58,13 +75,58 @@ class CategoriesApiTest extends TestCase
         $this->response->assertOk();
     }
 
-    public function testCategoryDestroy(): void
+    public function testCategoryCreateUserAdmin(): void
     {
-        $user = User::factory(['email' => 'category@email.com'])->make();
-        Passport::actingAs($user, ['categories']);
-
-        $category = Category::factory()->create();
-        $this->response = $this->json('DELETE', '/api/categories/' . $category->getKey());
+        $user = config('auth.providers.users.model')::factory()->create();
+        $user->assignRole('admin');
+        $this->response = $this->actingAs($user, 'api')->json('POST', '/api/categories', [
+            'name' => 'Category 123',
+            'icon_class' => 'fa-business-time',
+            'is_active' => true
+        ]);
         $this->response->assertOk();
+    }
+
+    public function testCategoryDestroyUserAdmin(): void
+    {
+        $user = config('auth.providers.users.model')::factory()->create();
+        $user->assignRole('admin');
+        $category = Category::factory()->create();
+        $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/categories/' . $category->getKey());
+        $this->response->assertOk();
+    }
+
+    public function testCategoryUpdateUserStudent(): void
+    {
+        $user = config('auth.providers.users.model')::factory()->create();
+        $user->assignRole('student');
+        $category = Category::factory()->create();
+        $this->response = $this->actingAs($user, 'api')->json('PUT', '/api/categories/' . $category->getKey(), [
+            'name' => 'Category 123',
+            'icon_class' => 'fa-business-time',
+            'is_active' => true
+        ]);
+        $this->response->assertForbidden();
+    }
+
+    public function testCategoryCreateUserStudent(): void
+    {
+        $user = config('auth.providers.users.model')::factory()->create();
+        $user->assignRole('student');
+        $this->response = $this->actingAs($user, 'api')->json('POST', '/api/categories', [
+            'name' => 'Category 123',
+            'icon_class' => 'fa-business-time',
+            'is_active' => true
+        ]);
+        $this->response->assertForbidden();
+    }
+
+    public function testCategoryDestroyUserStudent(): void
+    {
+        $user = config('auth.providers.users.model')::factory()->create();
+        $user->assignRole('student');
+        $category = Category::factory()->create();
+        $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/categories/' . $category->getKey());
+        $this->response->assertForbidden();
     }
 }

@@ -17,6 +17,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @OA\Info(title="Escola LMS", version="0.0.1")
+ **/
 class CategoryAPIController extends EscolaLmsBaseController implements CategorySwagger
 {
     private CategoriesRepositoryContract $categoryRepository;
@@ -29,9 +32,6 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     }
 
     /**
-     * Display a listing of the Categories.
-     * GET|HEAD /categories
-     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -62,9 +62,6 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     }
 
     /**
-     * Display the specified category.
-     * GET|HEAD /categories/{category}
-     *
      * @param Category $category
      * @return JsonResponse
      */
@@ -74,9 +71,6 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     }
 
     /**
-     * Destroy the specified category
-     * DELETE|HEAD /categories/{id}
-     *
      * @param int $id
      * @return JsonResponse
      */
@@ -88,9 +82,6 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     }
 
     /**
-     * Update the specified category
-     * PUT|HEAD /categories/{category}
-     *
      * @param Category $category
      * @param CategoryUpdateRequest $request
      * @return JsonResponse
@@ -110,9 +101,6 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     }
 
     /**
-     * Create the specified category
-     * POST|HEAD /categories/{category}
-     *
      * @param Request $request
      * @return JsonResponse
      */

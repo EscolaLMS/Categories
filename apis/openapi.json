@@ -178,7 +178,7 @@
             "delete": {
                 "summary": "Destroy category",
                 "description": "Destroy the specified category",
-                "operationId": "EscolaLms\\Categories\\Http\\Controllers\\Swagger\\CategorySwagger::destroy",
+                "operationId": "EscolaLms\\Categories\\Http\\Controllers\\Swagger\\CategorySwagger::delete",
                 "responses": {
                     "200": {
                         "description": "successful operation",

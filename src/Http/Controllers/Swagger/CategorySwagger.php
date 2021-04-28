@@ -2,6 +2,8 @@
 
 namespace EscolaLms\Categories\Http\Controllers\Swagger;
 
+use EscolaLms\Categories\Http\Requests\CategoryCreateRequest;
+use EscolaLms\Categories\Http\Requests\CategoryDeleteRequest;
 use EscolaLms\Categories\Http\Requests\CategoryUpdateRequest;
 use EscolaLms\Categories\Models\Category;
 use Illuminate\Http\JsonResponse;
@@ -131,7 +133,7 @@ interface CategorySwagger
      *      )
      * )
      */
-    public function create(Request $request): JsonResponse;
+    public function create(CategoryCreateRequest $categoryCreateRequest): JsonResponse;
 
     /**
      * @OA\Put(
@@ -201,5 +203,5 @@ interface CategorySwagger
      *      )
      * )
      */
-    public function destroy(int $id): JsonResponse;
+    public function delete(Category $category, CategoryDeleteRequest $categoryDeleteRequest): JsonResponse;
 }

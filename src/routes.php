@@ -7,9 +7,9 @@ Route::group(['prefix' => 'api/categories', 'middleware' => [\Illuminate\Routing
     Route::get('/', [CategoryAPIController::class, 'index']);
     Route::get('tree', [CategoryAPIController::class, 'tree']);
     Route::get('{category}', [CategoryAPIController::class, 'show']);
-    Route::group(['middleware' => ['auth:api', 'role:admin']], function () {
+    Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/', [CategoryAPIController::class, 'create']);
-        Route::delete('{id}', [CategoryAPIController::class, 'destroy']);
+        Route::delete('{category}', [CategoryAPIController::class, 'delete']);
         Route::put('{category}', [CategoryAPIController::class, 'update']);
     });
 });

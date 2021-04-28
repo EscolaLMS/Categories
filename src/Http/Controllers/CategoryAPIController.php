@@ -3,6 +3,8 @@
 namespace EscolaLms\Categories\Http\Controllers;
 
 use EscolaLms\Categories\Dtos\CategoryCreateDto;
+use EscolaLms\Categories\Http\Requests\CategoryCreateRequest;
+use EscolaLms\Categories\Http\Requests\CategoryDeleteRequest;
 use EscolaLms\Categories\Http\Requests\CategoryUpdateRequest;
 use EscolaLms\Categories\Http\Resources\CategoryResource;
 use EscolaLms\Categories\Http\Resources\CategoryTreeResource;
@@ -13,9 +15,6 @@ use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 /**
  * @OA\Info(title="Escola LMS", version="0.0.1")
@@ -71,12 +70,13 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     }
 
     /**
-     * @param int $id
+     * @param CategoryDeleteRequest $categoryDeleteRequest
+     * @param Category $category
      * @return JsonResponse
      */
-    public function destroy(int $id): JsonResponse
+    public function delete(Category $category, CategoryDeleteRequest $categoryDeleteRequest): JsonResponse
     {
-        $this->categoryService->delete($id);
+        $this->categoryService->delete($category->getKey());
 
         return response()->json(null, 200);
     }
@@ -101,12 +101,12 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     }
 
     /**
-     * @param Request $request
+     * @param CategoryCreateRequest $categoryCreateRequest
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse
+    public function create(CategoryCreateRequest $categoryCreateRequest): JsonResponse
     {
-        $categoryDto = CategoryCreateDto::instantiateFromRequest($request);
+        $categoryDto = CategoryCreateDto::instantiateFromRequest($categoryCreateRequest);
         $success = (bool)$this->categoryService->save($categoryDto);
         return new JsonResponse(['success' => $success], $success ? 200 : 422);
     }

@@ -2,6 +2,7 @@
 
 namespace EscolaLms\Categories\Tests;
 
+use EscolaLms\Categories\AuthServiceProvider;
 use EscolaLms\Categories\EscolaLmsCategoriesServiceProvider;
 use EscolaLms\Core\Models\User;
 use Laravel\Passport\PassportServiceProvider;
@@ -15,7 +16,8 @@ class TestCase extends \EscolaLms\Core\Tests\TestCase
             ...parent::getPackageProviders($app),
             PermissionServiceProvider::class,
             PassportServiceProvider::class,
-            EscolaLmsCategoriesServiceProvider::class
+            EscolaLmsCategoriesServiceProvider::class,
+            AuthServiceProvider::class,
         ];
     }
 

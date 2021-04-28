@@ -2,6 +2,7 @@
 
 namespace EscolaLms\Categories;
 
+use EscolaLms\Categories\Commands\CategoriesSeedCommand;
 use EscolaLms\Categories\Repositories\CategoriesRepository;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
 use EscolaLms\Categories\Services\CategoryService;
@@ -13,20 +14,21 @@ class EscolaLmsCategoriesServiceProvider extends ServiceProvider
 {
     use Injectable;
 
-    private const CONTRACTS = [
+    public $singletons = [
         CategoriesRepositoryContract::class => CategoriesRepository::class,
         CategoryServiceContracts::class => CategoryService::class
     ];
 
-    public function register()
+    public function register() : void
     {
-        $this->injectContract(self::CONTRACTS);
+        $this->commands([CategoriesSeedCommand::class]);
     }
 
-    public function boot()
+    public function boot() : void
     {
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->app['router']->aliasMiddleware('role', \Spatie\Permission\Middlewares\RoleMiddleware::class);
     }
+
 }

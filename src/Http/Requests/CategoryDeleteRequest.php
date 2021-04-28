@@ -5,12 +5,12 @@ namespace EscolaLms\Categories\Http\Requests;
 use EscolaLms\Categories\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryUpdateRequest extends FormRequest
+class CategoryDeleteRequest extends FormRequest
 {
 
     public function authorize()
     {
-        return auth()->user()->can('update', $this->category);
+        return auth()->user()->can('delete', $this->category);
     }
 
     /**
@@ -20,8 +20,6 @@ class CategoryUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => ['required', 'string', 'max:255']
-        ];
+        return [];
     }
 }

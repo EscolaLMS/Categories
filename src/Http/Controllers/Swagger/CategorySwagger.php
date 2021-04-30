@@ -13,7 +13,7 @@ interface CategorySwagger
 {
     /**
      * @OA\Get(
-     *      tags={"categories"},
+     *      tags={"Categories"},
      *      path="/api/categories",
      *      description="Get Categories",
      *      @OA\Response(
@@ -36,7 +36,7 @@ interface CategorySwagger
 
     /**
      * @OA\Get(
-     *      tags={"categories"},
+     *      tags={"Categories"},
      *      path="/api/categories/tree",
      *      description="Get Categories Tree",
      *      @OA\Response(
@@ -59,7 +59,7 @@ interface CategorySwagger
 
     /**
      * @OA\Get(
-     *      tags={"categories"},
+     *     tags={"Categories"},
      *      path="/api/categories/{id}",
      *      description="Get single Categories",
      *      @OA\Parameter(
@@ -90,6 +90,7 @@ interface CategorySwagger
 
     /**
      * @OA\Post(
+     *     tags={"Categories"},
      *     path="/api/categories",
      *     summary="Category create",
      *     description="Create single Categories",
@@ -137,6 +138,7 @@ interface CategorySwagger
 
     /**
      * @OA\Put(
+     *     tags={"Categories"},
      *     path="/api/categories/{id}",
      *     summary="Update category",
      *     description="Update single Categories",
@@ -184,6 +186,7 @@ interface CategorySwagger
 
     /**
      * @OA\Delete(
+     *     tags={"Categories"},
      *     path="/api/categories/{id}",
      *     summary="Destroy category",
      *     description="Destroy the specified category",

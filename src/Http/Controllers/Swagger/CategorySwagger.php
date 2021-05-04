@@ -94,6 +94,9 @@ interface CategorySwagger
      *     path="/api/categories",
      *     summary="Category create",
      *     description="Create single Categories",
+     *     security={
+     *         {"passport": {}},
+     *     },
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             @OA\Property(
@@ -142,6 +145,9 @@ interface CategorySwagger
      *     path="/api/categories/{id}",
      *     summary="Update category",
      *     description="Update single Categories",
+     *     security={
+     *         {"passport": {}},
+     *     },
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             @OA\Property(
@@ -187,6 +193,9 @@ interface CategorySwagger
     /**
      * @OA\Delete(
      *     tags={"Categories"},
+     *     security={
+     *         {"passport": {}},
+     *     },
      *     path="/api/categories/{id}",
      *     summary="Destroy category",
      *     description="Destroy the specified category",

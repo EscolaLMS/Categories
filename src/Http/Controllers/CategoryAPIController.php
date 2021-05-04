@@ -16,9 +16,7 @@ use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-/**
- * @OA\Info(title="Escola LMS", version="0.0.1")
- **/
+
 class CategoryAPIController extends EscolaLmsBaseController implements CategorySwagger
 {
     private CategoriesRepositoryContract $categoryRepository;

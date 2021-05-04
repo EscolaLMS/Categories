@@ -10,6 +10,10 @@ use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
 use EscolaLms\Core\Providers\Injectable;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * SWAGGER_VERSION
+ */
+
 class EscolaLmsCategoriesServiceProvider extends ServiceProvider
 {
     use Injectable;

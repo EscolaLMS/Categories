@@ -25,5 +25,6 @@ class TestCase extends \EscolaLms\Core\Tests\TestCase
     {
         $app['config']->set('auth.providers.users.model', User::class);
         $app['config']->set('passport.client_uuids', true);
+        $app['config']->set('app.debug', env('APP_DEBUG', true));
     }
 }

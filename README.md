@@ -29,6 +29,7 @@ To play the content you can use [EscolaLMS Categories](https://github.com/Escola
 You can seed library and content with build-in seeders that are accessible with
 
 - `php artisan category-permissions:seed` to add permissions
+- `php artisan db:seed --class="\EscolaLms\Categories\Database\Seeders\CategoriesSeeder"`
 
 ### Cors
 

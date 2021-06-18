@@ -1,7 +1,12 @@
 # Categories
 
+[![swagger](https://img.shields.io/badge/documentation-swagger-green)](https://escolalms.github.io/Categories/)
 [![codecov](https://codecov.io/gh/EscolaLMS/Categories/branch/main/graph/badge.svg?token=ci4VPQbrOI)](https://codecov.io/gh/EscolaLMS/Categories)
-[![phpunit](https://github.com/EscolaLMS/Categories/actions/workflows/test.yml/badge.svg)](https://github.com/EscolaLMS/Core/actions/workflows/test.yml)
+[![phpunit](https://github.com/EscolaLMS/Categories/actions/workflows/test.yml/badge.svg)](https://github.com/EscolaLMS/Categories/actions/workflows/test.yml)
+[![downloads](https://img.shields.io/packagist/dt/escolalms/courses)](https://packagist.org/packages/escolalms/categories)
+[![downloads](https://img.shields.io/packagist/v/escolalms/courses)](https://packagist.org/packages/escolalms/categories)
+[![downloads](https://img.shields.io/packagist/l/escolalms/courses)](https://packagist.org/packages/escolalms/categories)
+
 
 ## Features
 

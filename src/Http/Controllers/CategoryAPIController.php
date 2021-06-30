@@ -16,7 +16,6 @@ use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class CategoryAPIController extends EscolaLmsBaseController implements CategorySwagger
 {
     private CategoriesRepositoryContract $categoryRepository;
@@ -59,35 +58,37 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     }
 
     /**
-     * @param Category $category
+     * @param int $id
      * @return JsonResponse
      */
-    public function show(Category $category): JsonResponse
+    public function show(int $id): JsonResponse
     {
+        $category = $this->categoryRepository->find($id);
+
         return (new CategoryResource($category))->response();
     }
 
     /**
      * @param CategoryDeleteRequest $categoryDeleteRequest
-     * @param Category $category
+     * @param int $id
      * @return JsonResponse
      */
-    public function delete(Category $category, CategoryDeleteRequest $categoryDeleteRequest): JsonResponse
+    public function delete(int $id, CategoryDeleteRequest $categoryDeleteRequest): JsonResponse
     {
-        $this->categoryService->delete($category->getKey());
+        $this->categoryService->delete($id);
 
         return response()->json(null, 200);
     }
 
     /**
-     * @param Category $category
+     * @param int $id
      * @param CategoryUpdateRequest $request
      * @return JsonResponse
      */
-    public function update(Category $category, CategoryUpdateRequest $request): JsonResponse
+    public function update(int $id, CategoryUpdateRequest $request): JsonResponse
     {
         $categoryDto = new CategoryCreateDto(
-            $category->getKey(),
+            $id,
             $request->input('name'),
             $request->file('icon'),
             $request->input('icon_class'),

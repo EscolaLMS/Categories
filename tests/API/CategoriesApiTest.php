@@ -75,6 +75,8 @@ class CategoriesApiTest extends TestCase
         $user = config('auth.providers.users.model')::factory()->create();
         $user->guard_name = 'api';
         $user->givePermissionTo('update category');
+        $user->assignRole('admin');
+
         $category = Category::factory()->create();
         $this->response = $this->actingAs($user, 'api')->json('PUT', '/api/categories/' . $category->getKey(), [
             'name' => 'Category 123',

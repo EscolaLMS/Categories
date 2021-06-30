@@ -7,10 +7,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryUpdateRequest extends FormRequest
 {
-
     public function authorize()
     {
-        return auth()->user()->can('update', $this->category);
+        $user = auth()->user();
+        $category = Category::find($this->route('id'));
+        return isset($user) ? $user->can('update', $category) : false;
     }
 
     /**
@@ -21,7 +22,7 @@ class CategoryUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:255']
+
         ];
     }
 }

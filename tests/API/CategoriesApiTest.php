@@ -88,7 +88,7 @@ class CategoriesApiTest extends TestCase
     {
         $user = config('auth.providers.users.model')::factory()->create();
         $user->guard_name = 'api';
-        $user->givePermissionTo('create categories');
+        $user->givePermissionTo('create category');
         $this->response = $this->actingAs($user, 'api')->json('POST', '/api/categories', [
             'name' => 'Category 123',
             'icon_class' => 'fa-business-time',
@@ -101,7 +101,7 @@ class CategoriesApiTest extends TestCase
     {
         $user = config('auth.providers.users.model')::factory()->create();
         $user->guard_name = 'api';
-        $user->givePermissionTo('delete categories');
+        $user->givePermissionTo('delete category');
         $category = Category::factory()->create();
         $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/categories/' . $category->getKey());
         $this->response->assertOk();

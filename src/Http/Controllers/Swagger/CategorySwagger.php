@@ -86,7 +86,7 @@ interface CategorySwagger
      *      )
      *   )
      */
-    public function show(Category $category): JsonResponse;
+    public function show(int $id): JsonResponse;
 
     /**
      * @OA\Post(
@@ -188,7 +188,7 @@ interface CategorySwagger
      *      )
      * )
      */
-    public function update(Category $category, CategoryUpdateRequest $request): JsonResponse;
+    public function update(int $id, CategoryUpdateRequest $request): JsonResponse;
 
     /**
      * @OA\Delete(
@@ -215,5 +215,5 @@ interface CategorySwagger
      *      )
      * )
      */
-    public function delete(Category $category, CategoryDeleteRequest $categoryDeleteRequest): JsonResponse;
+    public function delete(int $id, CategoryDeleteRequest $categoryDeleteRequest): JsonResponse;
 }

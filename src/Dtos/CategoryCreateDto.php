@@ -16,7 +16,7 @@ class CategoryCreateDto implements DtoContract, InstantiateFromRequest
     private bool $isActive;
     private ?int $parentId;
 
-    public function __construct(?string $id, string $name, ?UploadedFile $icon, string $icon_class, bool $isActive, ?int $parentId)
+    public function __construct(?string $id, string $name, ?UploadedFile $icon, ?string $icon_class, ?bool $isActive, ?int $parentId)
     {
         $this->id = $id;
         $this->name = $name;

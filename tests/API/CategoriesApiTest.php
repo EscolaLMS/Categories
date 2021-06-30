@@ -116,6 +116,9 @@ class CategoriesApiTest extends TestCase
         $user->givePermissionTo('delete category');
         $category = Category::factory()->create();
         $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/categories/' . $category->getKey());
+
+        var_dump($this->response->getContent());
+
         $this->response->assertOk();
     }
 

@@ -7,10 +7,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryDeleteRequest extends FormRequest
 {
-
     public function authorize()
     {
-        return auth()->user()->can('delete', $this->category);
+        $user = auth()->user();
+        $category = Category::find($this->route('category'));
+        return isset($user) ? $user->can('delete', $category) : false;
     }
 
     /**

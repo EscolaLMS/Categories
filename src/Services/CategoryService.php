@@ -44,7 +44,7 @@ class CategoryService implements CategoryServiceContracts
         return Category::paginate($paginate_count);
     }
 
-    public function find(?string $id = null)
+    public function find(?int $id = null)
     {
         if ($id) {
             return Category::find($id);
@@ -83,7 +83,7 @@ class CategoryService implements CategoryServiceContracts
         return $success_message;
     }
 
-    public function delete(string $id): void
+    public function delete(int $id): void
     {
         Category::destroy($id);
     }

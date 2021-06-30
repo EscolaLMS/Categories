@@ -3,7 +3,6 @@
 
 namespace EscolaLms\Categories\Policies;
 
-
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Core\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -19,7 +18,7 @@ class CategoryPolicy
      */
     public function update(User $user, Category $category)
     {
-        return $user->can('update categories');
+        return $user->can('update category');
     }
 
     /**
@@ -28,7 +27,7 @@ class CategoryPolicy
      */
     public function create(User $user)
     {
-        return $user->can('create categories');
+        return $user->can('create category');
     }
 
     /**
@@ -38,6 +37,6 @@ class CategoryPolicy
      */
     public function delete(User $user, Category $category)
     {
-        return $user->can('delete categories');
+        return $user->can('delete category');
     }
 }

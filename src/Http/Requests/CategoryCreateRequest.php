@@ -7,10 +7,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryCreateRequest extends FormRequest
 {
-
     public function authorize()
     {
-        return auth()->user()->can('create', Category::class);
+        $user = auth()->user();
+        return isset($user) ? $user->can('create', Category::class) : false;
     }
 
     /**
@@ -20,6 +20,8 @@ class CategoryCreateRequest extends FormRequest
      */
     public function rules()
     {
-        return [];
+        return [
+            'name' => ['required', 'string', 'max:255']
+        ];
     }
 }

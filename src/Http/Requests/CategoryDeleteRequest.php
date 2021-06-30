@@ -10,7 +10,7 @@ class CategoryDeleteRequest extends FormRequest
     public function authorize()
     {
         $user = auth()->user();
-        $category = Category::find($this->route('id'));
+        $category = Category::find($this->route('category'));
         return isset($user) ? $user->can('delete', $category) : false;
     }
 

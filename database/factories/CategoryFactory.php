@@ -15,7 +15,7 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         $this->categoryService = app(CategoryServiceContracts::class);
-        $name = $this->faker->name;
+        $name = $this->faker->word;
 
         return [
             'name' => $name,

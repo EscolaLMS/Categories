@@ -5,3 +5,7 @@
 /src/.DS_Store
 /Http/.DS_Store
 /Http/Controllers/.DS_Store
+
+.phpunit.result.cache
+composer.lock
+openapi.json

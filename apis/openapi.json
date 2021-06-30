@@ -11,7 +11,7 @@
                     "Categories"
                 ],
                 "description": "Get Categories",
-                "operationId": "EscolaLms\\Categories\\Http\\Controllers\\Swagger\\CategorySwagger::index",
+                "operationId": "48a08353cd0b219365035661f7d532ce",
                 "responses": {
                     "200": {
                         "description": "successful operation",
@@ -33,7 +33,7 @@
                 ],
                 "summary": "Category create",
                 "description": "Create single Categories",
-                "operationId": "EscolaLms\\Categories\\Http\\Controllers\\Swagger\\CategorySwagger::create",
+                "operationId": "126bfa640341a4d1a45f8377efb4fb78",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -88,7 +88,7 @@
                     "Categories"
                 ],
                 "description": "Get Categories Tree",
-                "operationId": "EscolaLms\\Categories\\Http\\Controllers\\Swagger\\CategorySwagger::tree",
+                "operationId": "27694b673ff6d5c78af820806e45bfd7",
                 "responses": {
                     "200": {
                         "description": "successful operation",
@@ -111,7 +111,7 @@
                     "Categories"
                 ],
                 "description": "Get single Categories",
-                "operationId": "EscolaLms\\Categories\\Http\\Controllers\\Swagger\\CategorySwagger::show",
+                "operationId": "707a68073fb715968f89b631d9e3502a",
                 "parameters": [
                     {
                         "name": "id",
@@ -143,7 +143,7 @@
                 ],
                 "summary": "Update category",
                 "description": "Update single Categories",
-                "operationId": "EscolaLms\\Categories\\Http\\Controllers\\Swagger\\CategorySwagger::update",
+                "operationId": "15486aa520a77ec86e4a719cc28aca93",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -197,7 +197,7 @@
                 ],
                 "summary": "Destroy category",
                 "description": "Destroy the specified category",
-                "operationId": "EscolaLms\\Categories\\Http\\Controllers\\Swagger\\CategorySwagger::delete",
+                "operationId": "8419a959f8ee2f61ff137604d2760b76",
                 "responses": {
                     "200": {
                         "description": "successful operation",

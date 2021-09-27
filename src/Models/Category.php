@@ -30,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @property-read Category|null $parent
  * @property-read Collection|User[] $users
  * @property-read int|null $users_count
+ * @property-read string $name_with_breadcrumbs
  * @method static Builder|Category newModelQuery()
  * @method static Builder|Category newQuery()
  * @method static Builder|Category query()
@@ -74,5 +75,27 @@ class Category extends Model
     public function courses(): HasMany
     {
         return $this->hasMany("EscolaLms\\Courses\\Models\\Course");
+    }
+
+    public function getNameWithBreadcrumbsAttribute(): string
+    {
+        if ($this->parent) {
+            return $this->parent->generateBreadcrumbs([$this->getKey()]) . ucfirst($this->name);
+        }
+        return $this->name;
+    }
+
+    // There is no checking for cycles in parent<->child relation so for safety this method will stop concatenating names when a cycle is found
+    protected function generateBreadcrumbs(array $included_ids = []): string
+    {
+        $result = '';
+        if (!in_array($this->getKey(), $included_ids)) {
+            $included_ids[] = $this->getKey();
+            if ($this->parent) {
+                $result .= $this->parent->generateBreadcrumbs($included_ids);
+            }
+            $result .= ucfirst($this->name) . '. ';
+        }
+        return $result;
     }
 }

@@ -2,9 +2,13 @@
 
 namespace EscolaLms\Categories\Http\Resources;
 
+use EscolaLms\Categories\Models\Category;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @mixin \EscolaLms\Categories\Models\Category
+ */
 class CategoryResource extends JsonResource
 {
     /**
@@ -18,6 +22,7 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'name_with_breadcrumbs' => $this->name_with_breadcrumbs,
             'slug' => $this->slug,
             'icon' => $this->icon ? Storage::url($this->icon) : null,
             'icon_class' => $this->icon_class,

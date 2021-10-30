@@ -6,7 +6,7 @@
 [![downloads](https://img.shields.io/packagist/dt/escolalms/categories)](https://packagist.org/packages/escolalms/categories)
 [![downloads](https://img.shields.io/packagist/v/escolalms/categories)](https://packagist.org/packages/escolalms/categories)
 [![downloads](https://img.shields.io/packagist/l/escolalms/categories)](https://packagist.org/packages/escolalms/categories)
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/f0a1f2b4df55306155eb/maintainability)](https://codeclimate.com/github/EscolaLMS/Categories/maintainability)
 
 ## Features
 

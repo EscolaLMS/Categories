@@ -72,9 +72,9 @@ class Category extends Model
         return $this->belongsToMany(config('auth.providers.users.model'))->withTimestamps();
     }
 
-    public function courses(): HasMany
+    public function courses(): BelongsToMany
     {
-        return $this->hasMany("EscolaLms\\Courses\\Models\\Course");
+        return $this->belongsToMany(\EscolaLms\Courses\Models\Course::class);
     }
 
     public function getNameWithBreadcrumbsAttribute(): string

@@ -30,7 +30,7 @@ class CategoryResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'parent_id' => $this->parent_id,
-            'count' => class_exists(\EscolaLms\Courses\Models\Course::class) ? $this->courses->count() : 0,
+            'count' => class_exists(\EscolaLms\Courses\Models\Course::class) ? $this->courses()->where('active', true)->count() : 0,
         ];
     }
 }

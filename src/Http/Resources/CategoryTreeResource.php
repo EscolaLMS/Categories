@@ -13,7 +13,7 @@ class CategoryTreeResource extends CategoryResource
     public function toArray($request)
     {
         return parent::toArray($request) + [
-                'subcategories' => self::collection($this->children),
-            ];
+            'subcategories' => self::collection($this->children),
+        ];
     }
 }

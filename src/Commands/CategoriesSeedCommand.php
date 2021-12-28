@@ -3,6 +3,7 @@
 
 namespace EscolaLms\Categories\Commands;
 
+use EscolaLms\Categories\Enums\CategoriesPermissionsEnum;
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Permission;
 
@@ -28,8 +29,8 @@ class CategoriesSeedCommand extends Command
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
-        Permission::findOrCreate('update category', 'api');
-        Permission::findOrCreate('delete category', 'api');
-        Permission::findOrCreate('create category', 'api');
+        Permission::findOrCreate(CategoriesPermissionsEnum::CATEGORY_UPDATE, 'api');
+        Permission::findOrCreate(CategoriesPermissionsEnum::CATEGORY_DELETE, 'api');
+        Permission::findOrCreate(CategoriesPermissionsEnum::CATEGORY_CREATE, 'api');
     }
 }

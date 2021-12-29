@@ -3,6 +3,7 @@
 namespace EscolaLms\Categories\Tests\API;
 
 use EscolaLms\Categories\Database\Seeders\CategoriesPermissionSeeder;
+use EscolaLms\Categories\Enums\CategoriesPermissionsEnum;
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Tests\TestCase;
 use EscolaLms\Core\Models\User;
@@ -109,7 +110,7 @@ class CategoriesApiTest extends TestCase
     {
         $user = config('auth.providers.users.model')::factory()->create();
         $user->guard_name = 'api';
-        $user->givePermissionTo('update category');
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_UPDATE);
         $user->assignRole('admin');
 
         $category = Category::factory()->create();
@@ -125,7 +126,7 @@ class CategoriesApiTest extends TestCase
     {
         $user = config('auth.providers.users.model')::factory()->create();
         $user->guard_name = 'api';
-        $user->givePermissionTo('create category');
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_CREATE);
         $user->assignRole('admin');
 
         $this->response = $this->actingAs($this->user, 'api')->json('POST', '/api/categories', [
@@ -140,7 +141,7 @@ class CategoriesApiTest extends TestCase
     {
         $user = config('auth.providers.users.model')::factory()->create();
         $user->guard_name = 'api';
-        $user->givePermissionTo('delete category');
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_DELETE);
         $category = Category::factory()->create();
         $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/categories/' . $category->getKey());
 

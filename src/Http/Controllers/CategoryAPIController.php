@@ -5,6 +5,8 @@ namespace EscolaLms\Categories\Http\Controllers;
 use EscolaLms\Categories\Dtos\CategoryCreateDto;
 use EscolaLms\Categories\Http\Requests\CategoryCreateRequest;
 use EscolaLms\Categories\Http\Requests\CategoryDeleteRequest;
+use EscolaLms\Categories\Http\Requests\CategoryListRequest;
+use EscolaLms\Categories\Http\Requests\CategoryReadRequest;
 use EscolaLms\Categories\Http\Requests\CategoryUpdateRequest;
 use EscolaLms\Categories\Http\Resources\CategoryResource;
 use EscolaLms\Categories\Http\Resources\CategoryTreeResource;
@@ -28,10 +30,10 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     }
 
     /**
-     * @param Request $request
+     * @param CategoryListRequest $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(CategoryListRequest $request): JsonResponse
     {
         $categories = $this->categoryRepository->all(
             $request->except(['skip', 'limit']),
@@ -43,10 +45,10 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     }
 
     /**
-     * @param Request $request
+     * @param CategoryListRequest $request
      * @return JsonResponse
      */
-    public function tree(Request $request): JsonResponse
+    public function tree(CategoryListRequest $request): JsonResponse
     {
         $categories = $this->categoryRepository->allRoots(
             $request->except(['skip', 'limit']),
@@ -61,7 +63,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
      * @param int $id
      * @return JsonResponse
      */
-    public function show(int $id): JsonResponse
+    public function show(int $id, CategoryReadRequest $categoryReadRequest): JsonResponse
     {
         $category = $this->categoryRepository->find($id);
 

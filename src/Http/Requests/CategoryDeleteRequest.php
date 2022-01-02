@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryDeleteRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         $user = auth()->user();
         $category = Category::find($this->route('category'));
@@ -19,7 +19,7 @@ class CategoryDeleteRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [];
     }

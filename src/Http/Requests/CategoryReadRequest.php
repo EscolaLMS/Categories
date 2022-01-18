@@ -5,12 +5,12 @@ namespace EscolaLms\Categories\Http\Requests;
 use EscolaLms\Categories\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryCreateRequest extends FormRequest
+class CategoryReadRequest extends FormRequest
 {
     public function authorize(): bool
     {
         $user = auth()->user();
-        return isset($user) ? $user->can('create', Category::class) : false;
+        return isset($user) ? $user->can('read', Category::class) : false;
     }
 
     /**
@@ -20,8 +20,6 @@ class CategoryCreateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string', 'max:255']
-        ];
+        return [];
     }
 }

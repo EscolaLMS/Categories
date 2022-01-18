@@ -4,6 +4,8 @@ namespace EscolaLms\Categories\Http\Controllers\Swagger;
 
 use EscolaLms\Categories\Http\Requests\CategoryCreateRequest;
 use EscolaLms\Categories\Http\Requests\CategoryDeleteRequest;
+use EscolaLms\Categories\Http\Requests\CategoryListRequest;
+use EscolaLms\Categories\Http\Requests\CategoryReadRequest;
 use EscolaLms\Categories\Http\Requests\CategoryUpdateRequest;
 use EscolaLms\Categories\Models\Category;
 use Illuminate\Http\JsonResponse;
@@ -32,7 +34,7 @@ interface CategorySwagger
      *      )
      *   )
      */
-    public function index(Request $request): JsonResponse;
+    public function index(CategoryListRequest $request): JsonResponse;
 
     /**
      * @OA\Get(
@@ -55,7 +57,7 @@ interface CategorySwagger
      *      )
      *   )
      */
-    public function tree(Request $request): JsonResponse;
+    public function tree(CategoryListRequest $request): JsonResponse;
 
     /**
      * @OA\Get(
@@ -86,7 +88,7 @@ interface CategorySwagger
      *      )
      *   )
      */
-    public function show(int $id): JsonResponse;
+    public function show(int $id, CategoryReadRequest $categoryReadRequest): JsonResponse;
 
     /**
      * @OA\Post(

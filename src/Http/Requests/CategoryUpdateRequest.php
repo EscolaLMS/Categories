@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryUpdateRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         $user = auth()->user();
         $category = Category::find($this->route('category'));
@@ -19,10 +19,8 @@ class CategoryUpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
-        return [
-
-        ];
+        return [];
     }
 }

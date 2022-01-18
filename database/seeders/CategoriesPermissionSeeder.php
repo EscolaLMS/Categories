@@ -20,11 +20,15 @@ class CategoriesPermissionSeeder extends Seeder
         }
 
         $admin->givePermissionTo([
+            CategoriesPermissionsEnum::CATEGORY_LIST,
+            CategoriesPermissionsEnum::CATEGORY_READ,
             CategoriesPermissionsEnum::CATEGORY_CREATE,
             CategoriesPermissionsEnum::CATEGORY_DELETE,
             CategoriesPermissionsEnum::CATEGORY_UPDATE,
         ]);
         $tutor->givePermissionTo([
+            CategoriesPermissionsEnum::CATEGORY_LIST,
+            CategoriesPermissionsEnum::CATEGORY_READ,
             CategoriesPermissionsEnum::CATEGORY_CREATE,
             CategoriesPermissionsEnum::CATEGORY_DELETE,
             CategoriesPermissionsEnum::CATEGORY_UPDATE,

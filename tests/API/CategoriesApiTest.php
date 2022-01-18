@@ -19,39 +19,79 @@ class CategoriesApiTest extends TestCase
         parent::setUp();
         $this->seed(CategoriesPermissionSeeder::class);
 
-        $this->user = config('auth.providers.users.model')::factory()->create();
-        $this->user->guard_name = 'api';
-        $this->user->assignRole('admin');
+        $this->user = $this->createAdmin();
+    }
+
+    public function testCategoryCannotIndex(): void
+    {
+        $user = $this->createStudent();
+
+        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories');
+
+        $this->response->assertForbidden();
     }
 
     public function testCategoriesIndex(): void
     {
-        $this->response = $this->json('GET', '/api/categories');
+        $user = $this->createAdmin();
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_LIST);
+
+        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories');
+
         $this->response->assertOk();
+    }
+
+    public function testCategoryCannotIndexTree(): void
+    {
+        $user = $this->createStudent();
+
+        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories/tree');
+
+        $this->response->assertForbidden();
     }
 
     public function testCategoriesIndexTree(): void
     {
-        $this->response = $this->json('GET', '/api/categories/tree');
+        $user = $this->createAdmin();
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_LIST);
+
+        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories/tree');
+
         $this->response->assertOk();
+    }
+
+    public function testCategoryCannotShow(): void
+    {
+        $user = $this->createStudent();
+        $category = Category::factory()->create();
+
+        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories/' . $category->getKey());
+
+        $this->response->assertForbidden();
     }
 
     public function testCategoryShow(): void
     {
+        $user = $this->createAdmin();
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_READ);
         $category = Category::factory()->create();
 
-        $this->response = $this->json('GET', '/api/categories/' . $category->getKey());
+        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories/' . $category->getKey());
+
         $this->response->assertOk();
     }
 
     public function testCategoryShowWithParent(): void
     {
+        $user = $this->createAdmin();
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_READ);
         $category_parent = Category::factory()->create();
         $category_child = Category::factory()->create(['parent_id' => $category_parent->getKey()]);
 
         $this->assertEquals($category_parent->getKey(), $category_child->parent->getKey());
 
-        $this->response = $this->json('GET', '/api/categories/' . $category_child->getKey());
+        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories/' . $category_child->getKey());
+
         $this->response->assertOk();
         $this->response->assertJsonFragment([
             'name_with_breadcrumbs' => ucfirst($category_parent->name) . '. ' . ucfirst($category_child->name),
@@ -60,6 +100,8 @@ class CategoriesApiTest extends TestCase
 
     public function testCategoryShowWithCycleInAncestors(): void
     {
+        $user = $this->createAdmin();
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_READ);
         $category_parent = Category::factory()->create();
         $category_child = Category::factory()->create(['parent_id' => $category_parent->getKey()]);
         $category_parent->update(['parent_id' => $category_child->getKey()]);
@@ -67,7 +109,8 @@ class CategoriesApiTest extends TestCase
         $this->assertEquals($category_child->getKey(), $category_parent->parent->getKey());
         $this->assertEquals($category_parent->getKey(), $category_child->parent->getKey());
 
-        $this->response = $this->json('GET', '/api/categories/' . $category_child->getKey());
+        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories/' . $category_child->getKey());
+
         $this->response->assertOk();
         $this->response->assertJsonFragment([
             'name_with_breadcrumbs' => ucfirst($category_parent->name) . '. ' . ucfirst($category_child->name),
@@ -84,17 +127,20 @@ class CategoriesApiTest extends TestCase
             'icon_class' => 'fa-business-time',
             'is_active' => true
         ]);
+
         $this->response->assertForbidden();
     }
 
     public function testCategoryCreate(): void
     {
         $user = User::factory(['email' => 'category@email.com'])->make();
+
         $this->response = $this->actingAs($user, 'api')->json('POST', '/api/categories', [
             'name' => 'Category 123',
             'icon_class' => 'fa-business-time',
             'is_active' => true
         ]);
+
         $this->response->assertForbidden();
     }
 
@@ -102,16 +148,16 @@ class CategoriesApiTest extends TestCase
     {
         $user = User::factory(['email' => 'category@email.com'])->make();
         $category = Category::factory()->create();
+
         $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/categories/' . $category->getKey());
+
         $this->response->assertForbidden();
     }
 
     public function testCategoryUpdateUserAdmin(): void
     {
-        $user = config('auth.providers.users.model')::factory()->create();
-        $user->guard_name = 'api';
+        $user = $this->createAdmin();
         $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_UPDATE);
-        $user->assignRole('admin');
 
         $category = Category::factory()->create();
         $this->response = $this->actingAs($this->user, 'api')->json('PUT', '/api/categories/' . $category->getKey(), [
@@ -124,10 +170,8 @@ class CategoriesApiTest extends TestCase
 
     public function testCategoryCreateUserAdmin(): void
     {
-        $user = config('auth.providers.users.model')::factory()->create();
-        $user->guard_name = 'api';
+        $user = $this->createAdmin();
         $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_CREATE);
-        $user->assignRole('admin');
 
         $this->response = $this->actingAs($this->user, 'api')->json('POST', '/api/categories', [
             'name' => 'Category 123',
@@ -143,6 +187,7 @@ class CategoriesApiTest extends TestCase
         $user->guard_name = 'api';
         $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_DELETE);
         $category = Category::factory()->create();
+
         $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/categories/' . $category->getKey());
 
         $this->response->assertOk();
@@ -150,35 +195,55 @@ class CategoriesApiTest extends TestCase
 
     public function testCategoryUpdateUserStudent(): void
     {
-        $user = config('auth.providers.users.model')::factory()->create();
-        $user->assignRole('student');
+        $user = $this->createStudent();
         $category = Category::factory()->create();
+
         $this->response = $this->actingAs($user, 'api')->json('PUT', '/api/categories/' . $category->getKey(), [
             'name' => 'Category 123',
             'icon_class' => 'fa-business-time',
             'is_active' => true
         ]);
+
         $this->response->assertForbidden();
     }
 
     public function testCategoryCreateUserStudent(): void
     {
-        $user = config('auth.providers.users.model')::factory()->create();
-        $user->assignRole('student');
+        $user = $this->createStudent();
+
         $this->response = $this->actingAs($user, 'api')->json('POST', '/api/categories', [
             'name' => 'Category 123',
             'icon_class' => 'fa-business-time',
             'is_active' => true
         ]);
+
         $this->response->assertForbidden();
     }
 
     public function testCategoryDestroyUserStudent(): void
     {
+        $user = $this->createStudent();
+        $category = Category::factory()->create();
+
+        $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/categories/' . $category->getKey());
+
+        $this->response->assertForbidden();
+    }
+
+    private function createAdmin()
+    {
+        $user = config('auth.providers.users.model')::factory()->create();
+        $user->guard_name = 'api';
+        $user->assignRole('admin');
+
+        return $user;
+    }
+
+    private function createStudent()
+    {
         $user = config('auth.providers.users.model')::factory()->create();
         $user->assignRole('student');
-        $category = Category::factory()->create();
-        $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/categories/' . $category->getKey());
-        $this->response->assertForbidden();
+
+        return $user;
     }
 }

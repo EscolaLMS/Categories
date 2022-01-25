@@ -3,6 +3,7 @@
 namespace EscolaLms\Categories\Http\Resources;
 
 use EscolaLms\Categories\Models\Category;
+use EscolaLms\Courses\Enum\CourseStatusEnum;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,8 +31,8 @@ class CategoryResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'parent_id' => $this->parent_id,
-            'count' => class_exists(\EscolaLms\Courses\Models\Course::class) ? $this->courses()->where('active', true)->count() : 0,
-            'count_free' => class_exists(\EscolaLms\Courses\Models\Course::class) ? $this->courses()->where('active', true)->where('base_price', 0)->count() : 0,
+            'count' => class_exists(\EscolaLms\Courses\Models\Course::class) ? $this->courses()->where('status', CourseStatusEnum::PUBLISHED)->count() : 0,
+            'count_free' => class_exists(\EscolaLms\Courses\Models\Course::class) ? $this->courses()->where('status', CourseStatusEnum::PUBLISHED)->where('base_price', 0)->count() : 0,
         ];
     }
 }

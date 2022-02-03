@@ -9,8 +9,7 @@ class CategoryListRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $user = auth()->user();
-        return isset($user) ? $user->can('list', Category::class) : false;
+        return true;
     }
 
     /**

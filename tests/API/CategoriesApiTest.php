@@ -22,40 +22,16 @@ class CategoriesApiTest extends TestCase
         $this->user = $this->createAdmin();
     }
 
-    public function testCategoryCannotIndex(): void
-    {
-        $user = $this->createStudent();
-
-        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories');
-
-        $this->response->assertForbidden();
-    }
-
     public function testCategoriesIndex(): void
     {
-        $user = $this->createAdmin();
-        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_LIST);
-
-        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories');
+        $this->response = $this->json('GET', '/api/categories');
 
         $this->response->assertOk();
     }
 
-    public function testCategoryCannotIndexTree(): void
-    {
-        $user = $this->createStudent();
-
-        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories/tree');
-
-        $this->response->assertForbidden();
-    }
-
     public function testCategoriesIndexTree(): void
     {
-        $user = $this->createAdmin();
-        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_LIST);
-
-        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories/tree');
+        $this->response = $this->json('GET', '/api/categories/tree');
 
         $this->response->assertOk();
     }

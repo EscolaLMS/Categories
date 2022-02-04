@@ -14,6 +14,7 @@ use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Http\Controllers\Swagger\CategorySwagger;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
 use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
+use EscolaLms\Core\Enums\UserRole;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,8 +36,14 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
      */
     public function index(CategoryListRequest $request): JsonResponse
     {
+        $user = $request->user();
+        $search = $request->except(['skip', 'limit']);
+        if (!isset($user) || !$user->hasRole([UserRole::ADMIN])) {
+            $search['is_active'] = true;
+        }
+
         $categories = $this->categoryRepository->all(
-            $request->except(['skip', 'limit']),
+            $search,
             $request->get('skip'),
             $request->get('limit')
         );
@@ -50,8 +57,14 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
      */
     public function tree(CategoryListRequest $request): JsonResponse
     {
+        $user = $request->user();
+        $search = $request->except(['skip', 'limit']);
+        if (!isset($user) || !$user->hasRole([UserRole::ADMIN])) {
+            $search['is_active'] = true;
+        }
+
         $categories = $this->categoryRepository->allRoots(
-            $request->except(['skip', 'limit']),
+            $search,
             $request->get('skip'),
             $request->get('limit')
         );
@@ -61,6 +74,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
 
     /**
      * @param int $id
+     * @param CategoryReadRequest $categoryReadRequest
      * @return JsonResponse
      */
     public function show(int $id, CategoryReadRequest $categoryReadRequest): JsonResponse

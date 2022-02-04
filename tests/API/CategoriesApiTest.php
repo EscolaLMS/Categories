@@ -93,13 +93,16 @@ class CategoriesApiTest extends TestCase
 
     public function testCategoriesTreeUserAnonymous()
     {
-        Category::factory()->count(10)->create(['parent_id' => null, 'is_active' => true]);
-        Category::factory()->count(5)->create(['parent_id' => null, 'is_active' => false]);
+        $category_parent_active = Category::factory()->create(['parent_id' => null, 'is_active' => true]);
+        $category_parent_inactive = Category::factory()->create(['parent_id' => null, 'is_active' => false]);
+        Category::factory()->create(['parent_id' => $category_parent_active->getKey(), 'is_active' => false]);
+        Category::factory()->create(['parent_id' => $category_parent_inactive->getKey(), 'is_active' => false]);
 
         $this->response = $this->json('GET', '/api/categories/tree');
 
         $this->response->assertOk();
-        $this->response->assertJsonCount(10, 'data');
+        $this->response->assertJsonCount(1, 'data');
+        $this->response->assertJsonCount(0, 'data.0.subcategories');
         $this->response->assertJsonStructure([
             'data' => [[
                 'id',
@@ -122,13 +125,16 @@ class CategoriesApiTest extends TestCase
     public function testCategoriesTreeUserAdmin()
     {
         $user = $this->createAdmin();
-        Category::factory()->count(10)->create(['parent_id' => null, 'is_active' => true]);
-        Category::factory()->count(5)->create(['parent_id' => null, 'is_active' => false]);
+        $category_parent_active = Category::factory()->create(['parent_id' => null, 'is_active' => true]);
+        $category_parent_inactive = Category::factory()->create(['parent_id' => null, 'is_active' => false]);
+        Category::factory()->create(['parent_id' => $category_parent_active->getKey(), 'is_active' => true]);
+        Category::factory()->create(['parent_id' => $category_parent_inactive->getKey(), 'is_active' => false]);
 
         $this->response = $this->actingAs($user, 'api')->json('GET', '/api/categories/tree');
 
         $this->response->assertOk();
-        $this->response->assertJsonCount(15, 'data');
+        $this->response->assertJsonCount(2, 'data');
+        $this->response->assertJsonCount(1, 'data.0.subcategories');
         $this->response->assertJsonStructure([
             'data' => [[
                 'id',

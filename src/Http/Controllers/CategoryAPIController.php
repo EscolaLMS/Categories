@@ -9,15 +9,15 @@ use EscolaLms\Categories\Http\Requests\CategoryListRequest;
 use EscolaLms\Categories\Http\Requests\CategoryReadRequest;
 use EscolaLms\Categories\Http\Requests\CategoryUpdateRequest;
 use EscolaLms\Categories\Http\Resources\CategoryResource;
+use EscolaLms\Categories\Http\Resources\CategoryTreeAdminResource;
 use EscolaLms\Categories\Http\Resources\CategoryTreeResource;
-use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Http\Controllers\Swagger\CategorySwagger;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
 use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
 use EscolaLms\Core\Enums\UserRole;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+
 
 class CategoryAPIController extends EscolaLmsBaseController implements CategorySwagger
 {
@@ -58,8 +58,10 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     public function tree(CategoryListRequest $request): JsonResponse
     {
         $user = $request->user();
+        $isAdmin = isset($user) && $user->hasRole([UserRole::ADMIN]);
+
         $search = $request->except(['skip', 'limit']);
-        if (!isset($user) || !$user->hasRole([UserRole::ADMIN])) {
+        if (!$isAdmin) {
             $search['is_active'] = true;
         }
 
@@ -69,7 +71,9 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
             $request->get('limit')
         );
 
-        return CategoryTreeResource::collection($categories)->response();
+        return (!$isAdmin)
+            ? CategoryTreeResource::collection($categories)->response()
+            : CategoryTreeAdminResource::collection($categories)->response();
     }
 
     /**

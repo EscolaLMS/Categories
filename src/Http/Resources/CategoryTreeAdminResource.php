@@ -2,9 +2,7 @@
 
 namespace EscolaLms\Categories\Http\Resources;
 
-use EscolaLms\Categories\Models\Category;
-
-class CategoryTreeResource extends CategoryResource
+class CategoryTreeAdminResource extends CategoryResource
 {
     /**
      * Transform the resource into an array.
@@ -14,9 +12,8 @@ class CategoryTreeResource extends CategoryResource
      */
     public function toArray($request)
     {
-        $children = $this->children->filter(fn (Category $child) => $child->is_active);
         return parent::toArray($request) + [
-            'subcategories' => self::collection($children),
+            'subcategories' => self::collection($this->children),
         ];
     }
 }

@@ -66,6 +66,8 @@ class CategoriesApiTest extends TestCase
     public function testCategoriesIndexUserAdmin()
     {
         $user = $this->createAdmin();
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_LIST);
+
         Category::factory()->count(10)->create(['is_active' => true]);
         Category::factory()->count(5)->create(['is_active' => false]);
 
@@ -125,6 +127,8 @@ class CategoriesApiTest extends TestCase
     public function testCategoriesTreeUserAdmin()
     {
         $user = $this->createAdmin();
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_LIST);
+
         $category_parent_active = Category::factory()->create(['parent_id' => null, 'is_active' => true]);
         $category_parent_inactive = Category::factory()->create(['parent_id' => null, 'is_active' => false]);
         Category::factory()->create(['parent_id' => $category_parent_active->getKey(), 'is_active' => true]);

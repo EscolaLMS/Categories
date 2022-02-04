@@ -3,6 +3,7 @@
 namespace EscolaLms\Categories\Http\Controllers;
 
 use EscolaLms\Categories\Dtos\CategoryCreateDto;
+use EscolaLms\Categories\Enums\CategoriesPermissionsEnum;
 use EscolaLms\Categories\Http\Requests\CategoryCreateRequest;
 use EscolaLms\Categories\Http\Requests\CategoryDeleteRequest;
 use EscolaLms\Categories\Http\Requests\CategoryListRequest;
@@ -38,7 +39,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     {
         $user = $request->user();
         $search = $request->except(['skip', 'limit']);
-        if (!isset($user) || !$user->hasRole([UserRole::ADMIN])) {
+        if (!isset($user) || !$user->can(CategoriesPermissionsEnum::CATEGORY_LIST)) {
             $search['is_active'] = true;
         }
 
@@ -58,10 +59,10 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     public function tree(CategoryListRequest $request): JsonResponse
     {
         $user = $request->user();
-        $isAdmin = isset($user) && $user->hasRole([UserRole::ADMIN]);
+        $withActive = isset($user) && $user->can(CategoriesPermissionsEnum::CATEGORY_LIST);
 
         $search = $request->except(['skip', 'limit']);
-        if (!$isAdmin) {
+        if (!$withActive) {
             $search['is_active'] = true;
         }
 
@@ -71,7 +72,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
             $request->get('limit')
         );
 
-        return (!$isAdmin)
+        return (!$withActive)
             ? CategoryTreeResource::collection($categories)->response()
             : CategoryTreeAdminResource::collection($categories)->response();
     }

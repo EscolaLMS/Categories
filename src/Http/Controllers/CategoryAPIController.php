@@ -49,7 +49,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
             $request->get('limit')
         );
 
-        return CategoryResource::collection($categories)->response();
+        return $this->sendResponseForResource(CategoryResource::collection($categories), "Categories retrieved successfully");
     }
 
     /**
@@ -72,9 +72,11 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
             $request->get('limit')
         );
 
-        return (!$withActive)
-            ? CategoryTreeResource::collection($categories)->response()
-            : CategoryTreeAdminResource::collection($categories)->response();
+        $response = (!$withActive)
+            ? CategoryTreeResource::collection($categories)
+            : CategoryTreeAdminResource::collection($categories);
+
+        return $this->sendResponseForResource($response, "Categories tree retrieved successfully");
     }
 
     /**

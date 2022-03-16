@@ -15,7 +15,6 @@ use EscolaLms\Categories\Http\Resources\CategoryTreeResource;
 use EscolaLms\Categories\Http\Controllers\Swagger\CategorySwagger;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
 use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
-use EscolaLms\Core\Enums\UserRole;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use Illuminate\Http\JsonResponse;
 

@@ -8,6 +8,8 @@ use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
 use EscolaLms\Core\Dtos\PaginationDto;
 use EscolaLms\Core\Repositories\BaseRepository;
 use EscolaLms\Core\Repositories\Traits\Activationable;
+use EscolaLms\Courses\Enum\CourseStatusEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -50,7 +52,13 @@ class CategoriesRepository extends BaseRepository implements CategoriesRepositor
 
     public function allRoots(array $search = [], ?int $skip = null, ?int $limit = null): Collection
     {
-        return $this->allQuery($search, $skip, $limit)->whereNull('parent_id')->get();
+        $query = $this->allQuery($search, $skip, $limit)
+            ->with(['children', 'children.parent'])
+            ->whereNull('parent_id');
+
+        $query = $this->withCoursesCount($query);
+
+        return $query->get();
     }
 
     public function getByPopularity(PaginationDto $pagination, ?Carbon $from = null, ?Carbon $to = null): \Illuminate\Support\Collection
@@ -79,5 +87,30 @@ class CategoriesRepository extends BaseRepository implements CategoriesRepositor
         $this->applyPaginationDto($query, $pagination);
 
         return $query->get();
+    }
+
+    public function all(array $search = [], ?int $skip = null, ?int $limit = null, array $columns = ['*'], string $orderDirection = 'asc', string $orderColumn = 'id')
+    {
+        $query = $this->allQuery($search, $skip, $limit)->with('parent');
+        $query = $this->withCoursesCount($query);
+
+        return $query->orderBy($orderColumn, $orderDirection)->get($columns);
+    }
+
+    private function withCoursesCount(Builder $query): Builder
+    {
+        if (class_exists(\EscolaLms\Courses\Models\Course::class)) {
+            $query->withCount([
+                'courses as published_courses' => function (Builder $query) {
+                    $query->where('status','=', CourseStatusEnum::PUBLISHED);
+                },
+                'courses as free_courses' => function (Builder $query) {
+                    $query->where('status', '=', CourseStatusEnum::PUBLISHED)
+                        ->where('base_price', '=', 0);
+                },
+            ]);
+        }
+
+        return $query;
     }
 }

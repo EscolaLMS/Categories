@@ -58,7 +58,6 @@ class CategoriesApiTest extends TestCase
                 'updated_at',
                 'parent_id',
                 'count',
-                'count_free',
             ]]
         ]);
     }
@@ -88,7 +87,6 @@ class CategoriesApiTest extends TestCase
                 'updated_at',
                 'parent_id',
                 'count',
-                'count_free',
             ]]
         ]);
     }
@@ -118,7 +116,6 @@ class CategoriesApiTest extends TestCase
                 'updated_at',
                 'parent_id',
                 'count',
-                'count_free',
                 'subcategories'
             ]]
         ]);
@@ -152,7 +149,6 @@ class CategoriesApiTest extends TestCase
                 'updated_at',
                 'parent_id',
                 'count',
-                'count_free',
                 'subcategories'
             ]]
         ]);

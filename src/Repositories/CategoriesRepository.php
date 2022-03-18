@@ -103,11 +103,7 @@ class CategoriesRepository extends BaseRepository implements CategoriesRepositor
             $query->withCount([
                 'courses as published_courses' => function (Builder $query) {
                     $query->where('status','=', CourseStatusEnum::PUBLISHED);
-                },
-                'courses as free_courses' => function (Builder $query) {
-                    $query->where('status', '=', CourseStatusEnum::PUBLISHED)
-                        ->where('base_price', '=', 0);
-                },
+                }
             ]);
         }
 

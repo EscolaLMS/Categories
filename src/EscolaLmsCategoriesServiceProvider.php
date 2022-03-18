@@ -7,17 +7,13 @@ use EscolaLms\Categories\Repositories\CategoriesRepository;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
 use EscolaLms\Categories\Services\CategoryService;
 use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
-use EscolaLms\Core\Providers\Injectable;
 use Illuminate\Support\ServiceProvider;
 
 /**
  * SWAGGER_VERSION
  */
-
 class EscolaLmsCategoriesServiceProvider extends ServiceProvider
 {
-    use Injectable;
-
     public $singletons = [
         CategoriesRepositoryContract::class => CategoriesRepository::class,
         CategoryServiceContracts::class => CategoryService::class
@@ -34,5 +30,4 @@ class EscolaLmsCategoriesServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->app['router']->aliasMiddleware('role', \Spatie\Permission\Middlewares\RoleMiddleware::class);
     }
-
 }

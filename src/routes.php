@@ -2,7 +2,7 @@
 
 use EscolaLms\Categories\Http\Controllers\CategoryAPIController;
 use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'api', 'middleware' => [SubstituteBindings::class]], function () {
 

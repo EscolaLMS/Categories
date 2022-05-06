@@ -2,7 +2,7 @@
 
 use EscolaLms\Categories\Http\Controllers\CategoryAPIController;
 use Illuminate\Routing\Middleware\SubstituteBindings;
-use EscolaLms\Core\Http\Facades\Route;
+use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'api', 'middleware' => [SubstituteBindings::class]], function () {
 
@@ -11,7 +11,7 @@ Route::group(['prefix' => 'api', 'middleware' => [SubstituteBindings::class]], f
         Route::get('tree', [CategoryAPIController::class, 'tree']);
     });
 
-    Route::group(['prefix' => '/admin/categories', 'middleware' => Route::apply(['auth:api'])], function () {
+    Route::group(['prefix' => '/admin/categories', 'middleware' => ['auth:api']], function () {
         Route::get('/', [CategoryAPIController::class, 'index']);
         Route::get('tree', [CategoryAPIController::class, 'tree']);
         Route::get('{category}', [CategoryAPIController::class, 'show']);

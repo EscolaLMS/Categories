@@ -5,18 +5,17 @@ namespace EscolaLms\Categories\Dtos;
 use EscolaLms\Core\Dtos\Contracts\DtoContract;
 use EscolaLms\Core\Dtos\Contracts\InstantiateFromRequest;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 
 class CategoryCreateDto implements DtoContract, InstantiateFromRequest
 {
     private ?string $id;
     private ?string $name;
-    private ?UploadedFile $icon;
+    private $icon;
     private ?string $icon_class;
     private bool $isActive;
     private ?int $parentId;
 
-    public function __construct(?string $id, string $name, ?UploadedFile $icon, ?string $icon_class, ?bool $isActive, ?int $parentId)
+    public function __construct(?string $id, string $name, $icon, ?string $icon_class, ?bool $isActive, ?int $parentId)
     {
         $this->id = $id;
         $this->name = $name;
@@ -59,7 +58,7 @@ class CategoryCreateDto implements DtoContract, InstantiateFromRequest
         return $this->name;
     }
 
-    public function getIcon(): ?UploadedFile
+    public function getIcon()
     {
         return $this->icon;
     }

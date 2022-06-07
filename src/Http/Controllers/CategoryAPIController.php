@@ -112,7 +112,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
         $categoryDto = new CategoryCreateDto(
             $id,
             $request->input('name'),
-            $request->file('icon'),
+            $request->file('icon') ?? $request->input('icon'),
             $request->input('icon_class'),
             $request->boolean('is_active'),
             $request->input('parent_id')

@@ -51,6 +51,15 @@ class Category extends Model
 
     protected $table = 'categories';
 
+    protected $fillable = [
+        'name',
+        'slug',
+        'icon_class',
+        'is_active',
+        'parent_id',
+        'icon',
+    ];
+
     protected $guarded = [];
 
     protected $casts = [

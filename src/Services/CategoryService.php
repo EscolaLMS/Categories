@@ -2,7 +2,7 @@
 
 namespace EscolaLms\Categories\Services;
 
-use EscolaLms\Categories\Dtos\CategoryCreateDto;
+use EscolaLms\Categories\Dtos\CategoryDto;
 use EscolaLms\Categories\Enums\ConstantEnum;
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
@@ -11,7 +11,7 @@ use EscolaLms\Core\Dtos\PaginationDto;
 use EscolaLms\Core\Dtos\PeriodDto;
 use EscolaLms\Files\Helpers\FileHelper;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CategoryService implements CategoryServiceContracts
@@ -55,36 +55,36 @@ class CategoryService implements CategoryServiceContracts
         return Controller::getColumnTable('categories');
     }
 
-    public function save(CategoryCreateDto $categoryDto): string
+    public function store(CategoryDto $categoryDto): Category
     {
-        if ($categoryDto->getId()) {
-            $category = Category::find($categoryDto->getId());
-            $success_message = 'Category updated successfully';
-        } else {
-            $category = new Category();
-            $success_message = 'Category added successfully';
+        return DB::transaction(function () use($categoryDto) {
+            $category = $this->categoryRepository->create($categoryDto->toArray());
+            $category->slug = $this->slugify($category->name);
 
-            //create slug only while add
-            $slug = $categoryDto->getName();
-            $category->name = $categoryDto->getName();
-            $category->slug = self::slugify($slug);
+            if (!is_null($categoryDto->getIcon())) {
+                $category->icon = $this->saveIcon($categoryDto->getIcon(), $category->getKey());
+            }
+
             $category->save();
-        }
 
-        $icon = $categoryDto->getIcon();
+            return $category;
+        });
+    }
 
-        if (!is_null($icon)) {
-            $category->icon = FileHelper::getFilePath($icon, ConstantEnum::DIRECTORY . "/{$category->getKey()}/icons");
-        }
+    public function update(int $id, CategoryDto $categoryDto): Category
+    {
+        return DB::transaction(function () use($categoryDto, $id) {
+            $category = $this->categoryRepository->update($categoryDto->toArray(), $id);
+            $category->slug = $this->slugify($category->name);
 
-        $category->name = $categoryDto->getName();
-        $category->icon_class = $categoryDto->getIconClass();
+            if (!is_null($categoryDto->getIcon())) {
+                $category->icon = $this->saveIcon($categoryDto->getIcon(), $category->getKey());
+            }
 
-        $category->is_active = $categoryDto->getIsActive();
-        $category->parent_id = $categoryDto->getParentId();
-        $category->save();
+            $category->save();
 
-        return $success_message;
+            return $category;
+        });
     }
 
     public function delete(int $id): void
@@ -95,5 +95,10 @@ class CategoryService implements CategoryServiceContracts
     public function getPopular(PaginationDto $pagination, PeriodDto $period): Collection
     {
         return $this->categoryRepository->getByPopularity($pagination, $period->from(), $period->to());
+    }
+
+    private function saveIcon($icon, $id): string
+    {
+        return FileHelper::getFilePath($icon, ConstantEnum::DIRECTORY . "/{$id}/icons");
     }
 }

@@ -10,18 +10,18 @@ class CategoryCreateRequest extends FormRequest
     public function authorize(): bool
     {
         $user = auth()->user();
+
         return isset($user) ? $user->can('create', Category::class) : false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255']
+            'name' => ['required', 'string', 'max:255'],
+            'is_active' => ['required', 'bool'],
+            'icon' => ['nullable', 'file', 'image'],
+            'icon_class' => ['nullable', 'string', 'max:255'],
+            'parent_id' => ['nullable', 'exists:categories,id']
         ];
     }
 }

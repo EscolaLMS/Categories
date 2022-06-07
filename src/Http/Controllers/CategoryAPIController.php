@@ -2,7 +2,7 @@
 
 namespace EscolaLms\Categories\Http\Controllers;
 
-use EscolaLms\Categories\Dtos\CategoryCreateDto;
+use EscolaLms\Categories\Dtos\CategoryDto;
 use EscolaLms\Categories\Enums\CategoriesPermissionsEnum;
 use EscolaLms\Categories\Http\Requests\CategoryCreateRequest;
 use EscolaLms\Categories\Http\Requests\CategoryDeleteRequest;
@@ -109,16 +109,10 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
      */
     public function update(int $id, CategoryUpdateRequest $request): JsonResponse
     {
-        $categoryDto = new CategoryCreateDto(
-            $id,
-            $request->input('name'),
-            $request->file('icon') ?? $request->input('icon'),
-            $request->input('icon_class'),
-            $request->boolean('is_active'),
-            $request->input('parent_id')
-        );
-        $success = (bool)$this->categoryService->save($categoryDto);
-        return new JsonResponse(['success' => $success], $success ? 200 : 422);
+        $categoryDto = new CategoryDto($request->all());
+        $category = $this->categoryService->update($id, $categoryDto);
+
+        return $this->sendResponseForResource(CategoryResource::make($category), __('Category updated successfully'));
     }
 
     /**
@@ -127,8 +121,9 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
      */
     public function create(CategoryCreateRequest $categoryCreateRequest): JsonResponse
     {
-        $categoryDto = CategoryCreateDto::instantiateFromRequest($categoryCreateRequest);
-        $success = (bool)$this->categoryService->save($categoryDto);
-        return new JsonResponse(['success' => $success], $success ? 200 : 422);
+        $categoryDto = new CategoryDto($categoryCreateRequest->all());
+        $category = $this->categoryService->store($categoryDto);
+
+        return $this->sendResponseForResource(CategoryResource::make($category), __('Category created successfully'));
     }
 }

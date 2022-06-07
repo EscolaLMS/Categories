@@ -3,11 +3,13 @@
 namespace EscolaLms\Categories\Services;
 
 use EscolaLms\Categories\Dtos\CategoryCreateDto;
+use EscolaLms\Categories\Enums\ConstantEnum;
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
 use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
 use EscolaLms\Core\Dtos\PaginationDto;
 use EscolaLms\Core\Dtos\PeriodDto;
+use EscolaLms\Files\Helpers\FileHelper;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -64,13 +66,15 @@ class CategoryService implements CategoryServiceContracts
 
             //create slug only while add
             $slug = $categoryDto->getName();
+            $category->name = $categoryDto->getName();
             $category->slug = self::slugify($slug);
+            $category->save();
         }
 
         $icon = $categoryDto->getIcon();
 
         if (!is_null($icon)) {
-            $category->icon = Storage::putFile('categories', $icon, 'public');
+            $category->icon = FileHelper::getFilePath($icon, ConstantEnum::DIRECTORY . "/{$category->getKey()}/icons");
         }
 
         $category->name = $categoryDto->getName();

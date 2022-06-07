@@ -4,11 +4,14 @@ namespace EscolaLms\Categories\Tests\API;
 
 use EscolaLms\Categories\Database\Seeders\CategoriesPermissionSeeder;
 use EscolaLms\Categories\Enums\CategoriesPermissionsEnum;
+use EscolaLms\Categories\Enums\ConstantEnum;
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Tests\TestCase;
 use EscolaLms\Core\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class CategoriesApiTest extends TestCase
 {
@@ -322,6 +325,24 @@ class CategoriesApiTest extends TestCase
         $this->response = $this->actingAs($user, 'api')->json('DELETE', '/api/admin/categories/' . $category->getKey());
 
         $this->response->assertForbidden();
+    }
+
+    public function testUpdateCategoryIconFromExistingFile(): void
+    {
+        Storage::fake();
+
+        $category = Category::factory()->create();
+        $directoryPath = ConstantEnum::DIRECTORY . "/{$category->getKey()}/icons";
+        $iconPath = UploadedFile::fake()->image('icons-test.jpg')->storeAs($directoryPath, 'icons-test.jpg');
+
+        $this->actingAs($this->user, 'api')->putJson('/api/admin/categories/' . $category->getKey(), [
+            'name' => $category->name,
+            'icon' => $iconPath,
+        ])->assertOk();
+
+        $category->refresh();
+        Storage::assertExists($category->icon);
+        $this->assertEquals($category->icon, $iconPath);
     }
 
     private function createAdmin()

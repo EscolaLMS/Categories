@@ -2,7 +2,9 @@
 
 namespace EscolaLms\Categories\Http\Requests;
 
+use EscolaLms\Categories\Enums\ConstantEnum;
 use EscolaLms\Categories\Models\Category;
+use EscolaLms\Files\Rules\FileOrStringRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryUpdateRequest extends FormRequest
@@ -10,7 +12,8 @@ class CategoryUpdateRequest extends FormRequest
     public function authorize(): bool
     {
         $user = auth()->user();
-        $category = Category::find($this->route('category'));
+        $category = Category::find($this->getCategoryId());
+
         return isset($user) ? $user->can('update', $category) : false;
     }
 
@@ -21,6 +24,15 @@ class CategoryUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        $prefixPath = ConstantEnum::DIRECTORY . '/' . $this->getCategoryId();
+
+        return [
+            'icon' => [new FileOrStringRule(['image'], $prefixPath)],
+        ];
+    }
+
+    private function getCategoryId()
+    {
+        return $this->route('category');
     }
 }

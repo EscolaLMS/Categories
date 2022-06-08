@@ -17,17 +17,16 @@ class CategoryUpdateRequest extends FormRequest
         return isset($user) ? $user->can('update', $category) : false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         $prefixPath = ConstantEnum::DIRECTORY . '/' . $this->getCategoryId();
 
         return [
+            'name' => ['sometimes', 'string', 'max:255'],
+            'is_active' => ['sometimes', 'bool'],
             'icon' => [new FileOrStringRule(['image'], $prefixPath)],
+            'icon_class' => ['nullable', 'string', 'max:255'],
+            'parent_id' => ['nullable', 'exists:categories,id'],
         ];
     }
 

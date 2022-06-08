@@ -2,7 +2,8 @@
 
 namespace EscolaLms\Categories\Services\Contracts;
 
-use EscolaLms\Categories\Dtos\CategoryCreateDto;
+use EscolaLms\Categories\Dtos\CategoryDto;
+use EscolaLms\Categories\Models\Category;
 
 interface CategoryServiceContracts
 {
@@ -10,7 +11,9 @@ interface CategoryServiceContracts
 
     public function find(?int $id = null);
 
-    public function save(CategoryCreateDto $blogDto): string;
+    public function store(CategoryDto $categoryDto): Category;
+
+    public function update(int $id, CategoryDto $categoryDto): Category;
 
     public function delete(int $id): void;
 

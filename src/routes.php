@@ -17,6 +17,6 @@ Route::group(['prefix' => 'api', 'middleware' => [SubstituteBindings::class]], f
         Route::get('{category}', [CategoryAPIController::class, 'show']);
         Route::post('/', [CategoryAPIController::class, 'create']);
         Route::delete('{category}', [CategoryAPIController::class, 'delete']);
-        Route::put('{category}', [CategoryAPIController::class, 'update']);
+        Route::post('{category}', [CategoryAPIController::class, 'update']);
     });
 });

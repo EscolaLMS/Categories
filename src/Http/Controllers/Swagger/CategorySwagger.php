@@ -142,7 +142,7 @@ interface CategorySwagger
     public function create(CategoryCreateRequest $categoryCreateRequest): JsonResponse;
 
     /**
-     * @OA\Put(
+     * @OA\Post(
      *     tags={"Categories"},
      *     path="/api/categories/{id}",
      *     summary="Update category",

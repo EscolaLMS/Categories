@@ -219,7 +219,7 @@ class CategoriesApiTest extends TestCase
         $user = User::factory(['email' => 'category@email.com'])->make();
         $category = Category::factory()->create();
 
-        $this->response = $this->actingAs($user, 'api')->json('PUT', '/api/admin/categories/' . $category->getKey(), [
+        $this->response = $this->actingAs($user, 'api')->json('POST', '/api/admin/categories/' . $category->getKey(), [
             'name' => 'Category 123',
             'icon_class' => 'fa-business-time',
             'is_active' => true
@@ -257,7 +257,7 @@ class CategoriesApiTest extends TestCase
         $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_UPDATE);
 
         $category = Category::factory()->create();
-        $this->response = $this->actingAs($this->user, 'api')->json('PUT', '/api/admin/categories/' . $category->getKey(), [
+        $this->response = $this->actingAs($this->user, 'api')->json('POST', '/api/admin/categories/' . $category->getKey(), [
             'name' => 'Category 123',
             'icon_class' => 'fa-business-time',
             'is_active' => true
@@ -275,7 +275,7 @@ class CategoriesApiTest extends TestCase
             'icon_class' => 'fa-business-time',
             'is_active' => true
         ]);
-        $this->response->assertOk();
+        $this->response->assertCreated();
     }
 
     public function testCategoryDestroyUserAdmin(): void
@@ -295,7 +295,7 @@ class CategoriesApiTest extends TestCase
         $user = $this->createStudent();
         $category = Category::factory()->create();
 
-        $this->response = $this->actingAs($user, 'api')->json('PUT', '/api/admin/categories/' . $category->getKey(), [
+        $this->response = $this->actingAs($user, 'api')->json('POST', '/api/admin/categories/' . $category->getKey(), [
             'name' => 'Category 123',
             'icon_class' => 'fa-business-time',
             'is_active' => true
@@ -327,6 +327,22 @@ class CategoriesApiTest extends TestCase
         $this->response->assertForbidden();
     }
 
+    public function testUpdateOnlyCategoryIcon(): void
+    {
+        Storage::fake();
+
+        $category = Category::factory()->create();
+        $image = UploadedFile::fake()->image('icons-test.jpg');
+
+        $this->actingAs($this->user, 'api')->postJson('/api/admin/categories/' . $category->getKey(), [
+            'icon' => $image,
+        ])->assertOk();
+
+        $category->refresh();
+        Storage::assertExists($category->icon);
+        $this->assertEquals(ConstantEnum::DIRECTORY . "/{$category->getKey()}/icons/$image->name", $category->icon);
+    }
+
     public function testUpdateCategoryIconFromExistingFile(): void
     {
         Storage::fake();
@@ -335,8 +351,7 @@ class CategoriesApiTest extends TestCase
         $directoryPath = ConstantEnum::DIRECTORY . "/{$category->getKey()}/icons";
         $iconPath = UploadedFile::fake()->image('icons-test.jpg')->storeAs($directoryPath, 'icons-test.jpg');
 
-        $this->actingAs($this->user, 'api')->putJson('/api/admin/categories/' . $category->getKey(), [
-            'name' => $category->name,
+        $this->actingAs($this->user, 'api')->postJson('/api/admin/categories/' . $category->getKey(), [
             'icon' => $iconPath,
         ])->assertOk();
 

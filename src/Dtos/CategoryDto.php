@@ -8,9 +8,10 @@ use EscolaLms\Categories\Models\Category;
 class CategoryDto extends BaseDto implements ModelDtoContract
 {
     protected string $name;
-    protected string $icon_class;
+    protected string $iconClass;
     protected bool $isActive;
     protected int $parentId;
+    protected $iconPath = false;
     protected $icon;
 
     public function model(): Category
@@ -28,5 +29,14 @@ class CategoryDto extends BaseDto implements ModelDtoContract
     public function getIcon()
     {
         return $this->icon;
+    }
+
+    public function getIconPath()
+    {
+        if (is_null($this->getIcon()) && $this->iconPath !== false) {
+            return $this->iconPath;
+        }
+
+        return false;
     }
 }

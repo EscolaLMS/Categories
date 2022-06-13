@@ -81,6 +81,10 @@ class CategoryService implements CategoryServiceContracts
                 $category->icon = $this->saveIcon($categoryDto->getIcon(), $category->getKey());
             }
 
+            if ($categoryDto->getIconPath() !== false) {
+                $category->icon = $categoryDto->getIconPath();
+            }
+
             $category->save();
 
             return $category;

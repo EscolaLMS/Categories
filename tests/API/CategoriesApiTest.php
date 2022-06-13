@@ -341,6 +341,13 @@ class CategoriesApiTest extends TestCase
         $category->refresh();
         Storage::assertExists($category->icon);
         $this->assertEquals(ConstantEnum::DIRECTORY . "/{$category->getKey()}/icons/$image->name", $category->icon);
+
+        $response = $this->actingAs($this->user, 'api')->postJson('/api/admin/categories/' . $category->getKey(), [
+            'icon_path' => null,
+        ])->assertOk();
+
+        $data = $response->getData()->data;
+        $this->assertNull($data->icon);
     }
 
     public function testUpdateCategoryIconFromExistingFile(): void

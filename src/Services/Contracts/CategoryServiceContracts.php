@@ -18,4 +18,6 @@ interface CategoryServiceContracts
     public function delete(int $id): void;
 
     public function slugify(string $name): string;
+
+    public function allCategoriesAndChildrenIds(array $categoryIds): array;
 }

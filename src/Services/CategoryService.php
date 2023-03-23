@@ -101,8 +101,34 @@ class CategoryService implements CategoryServiceContracts
         return $this->categoryRepository->getByPopularity($pagination, $period->from(), $period->to());
     }
 
+    public function allCategoriesAndChildrenIds(array $categoryIds): array
+    {
+        $result = [];
+        foreach ($categoryIds as $categoryId) {
+            $categories = Category::where('id', $categoryId)->with(['children'])->get();
+            $flat = $this->flatten($categories, 'children');
+            $result = array_merge($result, array_map(fn ($cat) => $cat->id, $flat));
+        }
+        return $result;
+    }
+
     private function saveIcon($icon, $id): string
     {
         return FileHelper::getFilePath($icon, ConstantEnum::DIRECTORY . "/{$id}/icons");
+    }
+
+    private function flatten($input, string $key): array
+    {
+        $output = [];
+        foreach ($input as $object) {
+            $children = $object->$key ?? [];
+            $object->$key = [];
+            $output[] = $object;
+            $children = $this->flatten($children, $key);
+            foreach ($children as $child) {
+                $output[] = $child;
+            }
+        }
+        return $output;
     }
 }

@@ -20,6 +20,8 @@ class CategoryResource extends JsonResource
      */
     public function toArray($request)
     {
+        var_dump('name ' . $this->name);
+        var_dump('name_with_breadcrumbs ' . $this->name_with_breadcrumbs);
         return [
             'id' => $this->id,
             'name' => $this->name,

@@ -89,12 +89,11 @@ class CategoriesRepository extends BaseRepository implements CategoriesRepositor
         return $query->get();
     }
 
-    public function all(array $search = [], ?int $skip = null, ?int $limit = null, array $columns = ['*'], string $orderDirection = 'asc', string $orderColumn = 'id')
+    public function all(array $search = [], ?int $skip = null, ?int $limit = null, array $columns = ['*'], string $orderDirection = 'asc', string $orderColumn = 'id', ?int $perPage = 15)
     {
         $query = $this->allQuery($search, $skip, $limit)->with('parent');
         $query = $this->withCoursesCount($query);
-
-        return $query->orderBy($orderColumn, $orderDirection)->get($columns);
+        return $query->orderBy($orderColumn, $orderDirection)->paginate($perPage, $columns);
     }
 
     private function withCoursesCount(Builder $query): Builder

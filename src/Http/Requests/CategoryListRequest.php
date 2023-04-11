@@ -2,8 +2,8 @@
 
 namespace EscolaLms\Categories\Http\Requests;
 
-use EscolaLms\Categories\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CategoryListRequest extends FormRequest
 {
@@ -19,6 +19,11 @@ class CategoryListRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            'order_by' => ['sometimes', Rule::in(['created_at', 'name', 'slug', 'status', 'is_active'])],
+            'order' => ['sometimes', Rule::in(['ASC', 'DESC'])],
+            'page' => ['sometimes', 'integer'],
+            'per_page' => ['sometimes', 'integer'],
+        ];
     }
 }

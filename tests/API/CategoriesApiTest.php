@@ -94,6 +94,47 @@ class CategoriesApiTest extends TestCase
         ]);
     }
 
+    public function testCategoriesIndexUserAdminWithSort()
+    {
+        $user = $this->createAdmin();
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_LIST);
+
+        $categoryOne = Category::factory()->create([
+            'is_active' => true,
+            'name' => 'One'
+        ]);
+        $categoryTwo = Category::factory()->create([
+            'is_active' => false,
+            'name' => 'Two'
+        ]);
+        $categoryThree = Category::factory()->create([
+            'is_active' => true,
+            'name' => 'Three'
+        ]);
+        $categoryFour = Category::factory()->create([
+            'is_active' => false,
+            'name' => 'Four'
+        ]);
+
+        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/admin/categories', [
+            'order_by' => 'name',
+            'order' => 'DESC'
+        ]);
+
+        $this->assertTrue($this->response->json('data.0.id') === $categoryTwo->getKey());
+        $this->assertTrue($this->response->json('data.1.id') === $categoryThree->getKey());
+        $this->assertTrue($this->response->json('data.2.id') === $categoryOne->getKey());
+        $this->assertTrue($this->response->json('data.3.id') === $categoryFour->getKey());
+
+        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/admin/categories', [
+            'name' => 'One'
+        ]);
+
+        $this->response->assertJsonCount(1, 'data');
+
+        $this->assertTrue($this->response->json('data.0.id') === $categoryOne->getKey());
+    }
+
     public function testCategoriesTreeUserAnonymous()
     {
         $category_parent_active = Category::factory()->create(['parent_id' => null, 'is_active' => true]);

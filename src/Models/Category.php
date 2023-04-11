@@ -91,8 +91,6 @@ class Category extends Model
         if ($this->parent) {
             return $this->parent->generateBreadcrumbs([$this->getKey()]) . ucfirst($this->name);
         }
-        var_dump('get');
-        var_dump($this->name);
         return $this->name;
     }
 
@@ -107,8 +105,6 @@ class Category extends Model
             }
             $result .= ucfirst($this->name) . '. ';
         }
-        var_dump('generate');
-        var_dump($result);
         return $result;
     }
 }

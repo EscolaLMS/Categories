@@ -46,7 +46,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
             $search,
             $request->get('skip'),
             $request->get('limit'),
-            $request->get('columns', []),
+            $request->get('columns', ['*']),
             $request->get('order', 'asc'),
             $request->get('order_by', 'id'),
             $request->get('per_page', 15)

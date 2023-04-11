@@ -37,7 +37,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     public function index(CategoryListRequest $request): JsonResponse
     {
         $user = $request->user();
-        $search = $request->except(['skip', 'limit']);
+        $search = $request->except(['skip', 'limit', 'columns', 'order', 'order_by', 'per_page']);
         if (!isset($user) || !$user->can(CategoriesPermissionsEnum::CATEGORY_LIST)) {
             $search['is_active'] = true;
         }
@@ -45,7 +45,11 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
         $categories = $this->categoryRepository->all(
             $search,
             $request->get('skip'),
-            $request->get('limit')
+            $request->get('limit'),
+            $request->get('columns', ['*']),
+            $request->get('order', 'asc'),
+            $request->get('order_by', 'id'),
+            $request->get('per_page', 15)
         );
 
         return $this->sendResponseForResource(CategoryResource::collection($categories), "Categories retrieved successfully");

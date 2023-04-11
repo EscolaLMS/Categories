@@ -2,8 +2,6 @@
 
 namespace EscolaLms\Categories\Http\Resources;
 
-use EscolaLms\Categories\Models\Category;
-use EscolaLms\Courses\Enum\CourseStatusEnum;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 

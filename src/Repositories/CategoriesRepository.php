@@ -3,12 +3,15 @@
 namespace EscolaLms\Categories\Repositories;
 
 use Carbon\Carbon;
+use EscolaLms\Categories\Dtos\CategoryCriteriaFilterDto;
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
+use EscolaLms\Core\Dtos\OrderDto;
 use EscolaLms\Core\Dtos\PaginationDto;
 use EscolaLms\Core\Repositories\BaseRepository;
 use EscolaLms\Core\Repositories\Traits\Activationable;
 use EscolaLms\Courses\Enum\CourseStatusEnum;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -89,11 +92,21 @@ class CategoriesRepository extends BaseRepository implements CategoriesRepositor
         return $query->get();
     }
 
-    public function all(array $search = [], ?int $skip = null, ?int $limit = null, array $columns = ['*'], string $orderDirection = 'asc', string $orderColumn = 'id', ?int $perPage = 15)
+    public function listAll(CategoryCriteriaFilterDto $criteriaDto, OrderDto $dto, array $columns = ['*'], ?int $perPage = 15, ?bool $isActive = null): LengthAwarePaginator
     {
-        $query = $this->allQuery($search, $skip, $limit)->with('parent');
+        $query = $this->queryWithAppliedCriteria($criteriaDto->toArray())->with('parent');
+
+        if (!is_null($isActive)) {
+            $query->where('is_active', $isActive);
+        }
+
         $query = $this->withCoursesCount($query);
-        return $query->orderBy($orderColumn, $orderDirection)->paginate($perPage, $columns);
+
+        if ($dto->getOrderBy()) {
+            $query->orderBy($dto->getOrderBy(), $dto->getOrder() ?? 'asc');
+        }
+
+        return $query->paginate($perPage, $columns);
     }
 
     private function withCoursesCount(Builder $query): Builder

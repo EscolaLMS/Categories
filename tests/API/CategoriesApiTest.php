@@ -45,7 +45,6 @@ class CategoriesApiTest extends TestCase
         Category::factory()->count(5)->create(['is_active' => false]);
 
         $this->response = $this->json('GET', '/api/categories');
-
         $this->response->assertOk();
         $this->response->assertJsonCount(10, 'data');
         $this->response->assertJsonStructure([
@@ -94,7 +93,7 @@ class CategoriesApiTest extends TestCase
         ]);
     }
 
-    public function testCategoriesIndexUserAdminWithSort()
+    public function testCategoriesIndexUserAdminWithSortAndFilter()
     {
         $user = $this->createAdmin();
         $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_LIST);
@@ -127,12 +126,12 @@ class CategoriesApiTest extends TestCase
         $this->assertTrue($this->response->json('data.3.id') === $categoryFour->getKey());
 
         $this->response = $this->actingAs($user, 'api')->json('GET', '/api/admin/categories', [
-            'name' => 'One'
+            'name' => 'Fo'
         ]);
 
         $this->response->assertJsonCount(1, 'data');
 
-        $this->assertTrue($this->response->json('data.0.id') === $categoryOne->getKey());
+        $this->assertTrue($this->response->json('data.0.id') === $categoryFour->getKey());
     }
 
     public function testCategoriesTreeUserAnonymous()

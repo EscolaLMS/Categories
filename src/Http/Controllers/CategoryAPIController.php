@@ -2,8 +2,10 @@
 
 namespace EscolaLms\Categories\Http\Controllers;
 
+use EscolaLms\Categories\Dtos\CategoryCriteriaFilterDto;
 use EscolaLms\Categories\Dtos\CategoryDto;
 use EscolaLms\Categories\Enums\CategoriesPermissionsEnum;
+use EscolaLms\Categories\Http\Controllers\Swagger\CategorySwagger;
 use EscolaLms\Categories\Http\Requests\CategoryCreateRequest;
 use EscolaLms\Categories\Http\Requests\CategoryDeleteRequest;
 use EscolaLms\Categories\Http\Requests\CategoryListRequest;
@@ -12,9 +14,9 @@ use EscolaLms\Categories\Http\Requests\CategoryUpdateRequest;
 use EscolaLms\Categories\Http\Resources\CategoryResource;
 use EscolaLms\Categories\Http\Resources\CategoryTreeAdminResource;
 use EscolaLms\Categories\Http\Resources\CategoryTreeResource;
-use EscolaLms\Categories\Http\Controllers\Swagger\CategorySwagger;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
 use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
+use EscolaLms\Core\Dtos\OrderDto;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use Illuminate\Http\JsonResponse;
 
@@ -37,19 +39,21 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     public function index(CategoryListRequest $request): JsonResponse
     {
         $user = $request->user();
-        $search = $request->except(['skip', 'limit', 'columns', 'order', 'order_by', 'per_page']);
+        $criteriaDto = CategoryCriteriaFilterDto::instantiateFromRequest($request);
+        $orderDto = OrderDto::instantiateFromRequest($request);
+
+        $isActive = $request->has('is_active') ? $request->boolean('is_active') : null;
+
         if (!isset($user) || !$user->can(CategoriesPermissionsEnum::CATEGORY_LIST)) {
-            $search['is_active'] = true;
+            $isActive = true;
         }
 
-        $categories = $this->categoryRepository->all(
-            $search,
-            $request->get('skip'),
-            $request->get('limit'),
+        $categories = $this->categoryRepository->listAll(
+            $criteriaDto,
+            $orderDto,
             $request->get('columns', ['*']),
-            $request->get('order', 'asc'),
-            $request->get('order_by', 'id'),
-            $request->get('per_page', 15)
+            $request->get('per_page', 15),
+            $isActive
         );
 
         return $this->sendResponseForResource(CategoryResource::collection($categories), "Categories retrieved successfully");

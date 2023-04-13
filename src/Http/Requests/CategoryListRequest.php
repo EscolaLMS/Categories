@@ -20,7 +20,7 @@ class CategoryListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order_by' => ['sometimes', Rule::in(['created_at', 'name', 'slug', 'status', 'is_active'])],
+            'order_by' => ['sometimes', Rule::in(['id', 'created_at', 'name', 'slug', 'status', 'is_active'])],
             'order' => ['sometimes', Rule::in(['ASC', 'DESC'])],
             'page' => ['sometimes', 'integer'],
             'per_page' => ['sometimes', 'integer'],

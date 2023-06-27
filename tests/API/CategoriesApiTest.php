@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class CategoriesApiTest extends TestCase
 {
-    use WithoutMiddleware, DatabaseTransactions;
+    use DatabaseTransactions;
 
     protected function setUp(): void
     {
@@ -51,6 +51,7 @@ class CategoriesApiTest extends TestCase
             'data' => [[
                 'id',
                 'name',
+                'description',
                 'name_with_breadcrumbs',
                 'slug',
                 'icon',
@@ -80,6 +81,7 @@ class CategoriesApiTest extends TestCase
             'data' => [[
                 'id',
                 'name',
+                'description',
                 'name_with_breadcrumbs',
                 'slug',
                 'icon',
@@ -134,6 +136,27 @@ class CategoriesApiTest extends TestCase
         $this->assertTrue($this->response->json('data.0.id') === $categoryFour->getKey());
     }
 
+    public function testCategoriesIndexFiltering(): void
+    {
+        $user = $this->createAdmin();
+        $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_LIST);
+
+        Category::factory()->count(5)->create();
+        Category::factory()->create(['slug' => 'category-1']);
+        Category::factory()->create(['slug' => 'category-123']);
+        $category = Category::factory()->create();
+
+        $this->actingAs($user, 'api')
+            ->getJson('/api/admin/categories?slug=' . 'category')
+            ->assertOk()
+            ->assertJsonCount(2, 'data');
+
+        $this->actingAs($user, 'api')
+            ->getJson('/api/admin/categories?id=' . $category->getKey())
+            ->assertOk()
+            ->assertJsonCount(1, 'data');
+    }
+
     public function testCategoriesTreeUserAnonymous()
     {
         $category_parent_active = Category::factory()->create(['parent_id' => null, 'is_active' => true]);
@@ -150,6 +173,7 @@ class CategoriesApiTest extends TestCase
             'data' => [[
                 'id',
                 'name',
+                'description',
                 'name_with_breadcrumbs',
                 'slug',
                 'icon',
@@ -183,6 +207,7 @@ class CategoriesApiTest extends TestCase
             'data' => [[
                 'id',
                 'name',
+                'description',
                 'name_with_breadcrumbs',
                 'slug',
                 'icon',
@@ -213,9 +238,25 @@ class CategoriesApiTest extends TestCase
         $user->givePermissionTo(CategoriesPermissionsEnum::CATEGORY_READ);
         $category = Category::factory()->create();
 
-        $this->response = $this->actingAs($user, 'api')->json('GET', '/api/admin/categories/' . $category->getKey());
-
-        $this->response->assertOk();
+        $this->actingAs($user, 'api')
+            ->getJson('/api/admin/categories/' . $category->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'description',
+                    'name_with_breadcrumbs',
+                    'slug',
+                    'icon',
+                    'icon_class',
+                    'is_active',
+                    'created_at',
+                    'updated_at',
+                    'parent_id',
+                    'count',
+                ]
+            ]);
     }
 
     public function testCategoryShowWithParent(): void
@@ -299,10 +340,19 @@ class CategoriesApiTest extends TestCase
         $category = Category::factory()->create();
         $this->response = $this->actingAs($this->user, 'api')->json('POST', '/api/admin/categories/' . $category->getKey(), [
             'name' => 'Category 123',
+            'description' => 'Description 123',
             'icon_class' => 'fa-business-time',
             'is_active' => true
         ]);
         $this->response->assertOk();
+
+        $this->assertDatabaseHas($category->getTable(), [
+            'id' => $category->getKey(),
+            'name' => 'Category 123',
+            'description' => 'Description 123',
+            'icon_class' => 'fa-business-time',
+            'is_active' => true
+        ]);
     }
 
     public function testCategoryCreateUserAdmin(): void
@@ -312,10 +362,19 @@ class CategoriesApiTest extends TestCase
 
         $this->response = $this->actingAs($this->user, 'api')->json('POST', '/api/admin/categories', [
             'name' => 'Category 123',
+            'description' => 'Description 123',
             'icon_class' => 'fa-business-time',
             'is_active' => true
         ]);
         $this->response->assertCreated();
+
+        $this->assertDatabaseHas((new Category())->getTable(), [
+            'id' => $this->response->getData()->data->id,
+            'name' => 'Category 123',
+            'description' => 'Description 123',
+            'icon_class' => 'fa-business-time',
+            'is_active' => true
+        ]);
     }
 
     public function testCategoryDestroyUserAdmin(): void

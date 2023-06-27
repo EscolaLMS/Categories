@@ -23,6 +23,7 @@ class CategoryUpdateRequest extends FormRequest
 
         return [
             'name' => ['sometimes', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
             'is_active' => ['sometimes', 'bool'],
             'icon' => [new FileOrStringRule(['image'], $prefixPath)],
             'icon_class' => ['nullable', 'string', 'max:255'],

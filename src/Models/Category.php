@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property string $name
+ * @property string|null $description
  * @property string|null $slug
  * @property string|null $icon_class
  * @property bool $is_active
@@ -53,6 +54,7 @@ class Category extends Model
 
     protected $fillable = [
         'name',
+        'description',
         'slug',
         'icon_class',
         'is_active',

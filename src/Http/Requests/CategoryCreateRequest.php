@@ -18,6 +18,7 @@ class CategoryCreateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
             'is_active' => ['required', 'bool'],
             'icon' => ['nullable', 'file', 'image'],
             'icon_class' => ['nullable', 'string', 'max:255'],

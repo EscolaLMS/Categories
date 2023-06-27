@@ -19,6 +19,7 @@ class CategoryFactory extends Factory
 
         return [
             'name' => $name,
+            'description' => $this->faker->sentence,
             'slug' => $this->categoryService->slugify($name),
             'icon' => $this->makeIcon(),
             'is_active' => $this->faker->boolean,

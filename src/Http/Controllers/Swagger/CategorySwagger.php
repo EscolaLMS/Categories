@@ -107,6 +107,10 @@ interface CategorySwagger
      *                 example="Dokumentacja",
      *             ),
      *             @OA\Property(
+     *                 property="description",
+     *                 type="string",
+     *             ),
+     *             @OA\Property(
      *                 property="icon_class",
      *                 type="string",
      *                 example="fa-business-time",
@@ -156,6 +160,10 @@ interface CategorySwagger
      *                 property="name",
      *                 type="string",
      *                 example="Dokumentacja",
+     *             ),
+     *             @OA\Property(
+     *                 property="description",
+     *                 type="string",
      *             ),
      *             @OA\Property(
      *                 property="icon_class",

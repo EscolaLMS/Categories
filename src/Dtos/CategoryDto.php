@@ -13,6 +13,7 @@ class CategoryDto extends BaseDto implements ModelDtoContract
     protected int $parentId;
     protected $iconPath = false;
     protected $icon;
+    protected ?string $description;
 
     public function model(): Category
     {

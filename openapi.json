@@ -43,6 +43,9 @@
                                         "type": "string",
                                         "example": "Dokumentacja"
                                     },
+                                    "description": {
+                                        "type": "string"
+                                    },
                                     "icon_class": {
                                         "type": "string",
                                         "example": "fa-business-time"
@@ -152,6 +155,9 @@
                                     "name": {
                                         "type": "string",
                                         "example": "Dokumentacja"
+                                    },
+                                    "description": {
+                                        "type": "string"
                                     },
                                     "icon_class": {
                                         "type": "string",

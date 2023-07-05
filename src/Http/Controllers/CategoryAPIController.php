@@ -95,7 +95,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     {
         $category = $this->categoryRepository->find($id);
 
-        return (new CategoryResource($category))->response();
+        return $this->sendResponseForResource(CategoryResource::make($category));
     }
 
     /**

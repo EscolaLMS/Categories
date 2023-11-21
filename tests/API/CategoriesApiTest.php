@@ -61,6 +61,7 @@ class CategoriesApiTest extends TestCase
                 'updated_at',
                 'parent_id',
                 'count',
+                'order',
             ]]
         ]);
     }
@@ -91,6 +92,7 @@ class CategoriesApiTest extends TestCase
                 'updated_at',
                 'parent_id',
                 'count',
+                'order',
             ]]
         ]);
     }
@@ -183,7 +185,8 @@ class CategoriesApiTest extends TestCase
                 'updated_at',
                 'parent_id',
                 'count',
-                'subcategories'
+                'subcategories',
+                'order',
             ]]
         ]);
     }
@@ -217,7 +220,8 @@ class CategoriesApiTest extends TestCase
                 'updated_at',
                 'parent_id',
                 'count',
-                'subcategories'
+                'subcategories',
+                'order',
             ]]
         ]);
     }
@@ -255,6 +259,7 @@ class CategoriesApiTest extends TestCase
                     'updated_at',
                     'parent_id',
                     'count',
+                    'order',
                 ]
             ]);
     }
@@ -342,7 +347,8 @@ class CategoriesApiTest extends TestCase
             'name' => 'Category 123',
             'description' => 'Description 123',
             'icon_class' => 'fa-business-time',
-            'is_active' => true
+            'is_active' => true,
+            'order' => 10,
         ]);
         $this->response->assertOk();
 
@@ -351,7 +357,8 @@ class CategoriesApiTest extends TestCase
             'name' => 'Category 123',
             'description' => 'Description 123',
             'icon_class' => 'fa-business-time',
-            'is_active' => true
+            'is_active' => true,
+            'order' => 10,
         ]);
     }
 
@@ -464,6 +471,34 @@ class CategoriesApiTest extends TestCase
         $category->refresh();
         Storage::assertExists($category->icon);
         $this->assertEquals($category->icon, $iconPath);
+    }
+
+    public function testAdminSortCategoriesUnauthorized(): void
+    {
+        $this->deleteJson('api/admin/categories/sort')
+            ->assertUnauthorized();
+    }
+
+    public function testAdminSortCategories(): void
+    {
+        $category1 = Category::factory()->create();
+        $category2 = Category::factory()->create();
+
+        $this->actingAs($this->user, 'api')
+            ->postJson('api/admin/categories/sort', [
+                'orders' => [
+                    [
+                        'id' => $category1->getKey(),
+                        'order' => 12,
+                    ], [
+                        'id' => $category2->getKey(),
+                        'order' => 13,
+                    ],
+                ],
+            ])->assertOk();
+
+        $this->assertEquals(12, $category1->refresh()->order);
+        $this->assertEquals(13, $category2->refresh()->order);
     }
 
     private function createAdmin()

@@ -3,6 +3,7 @@
 namespace EscolaLms\Categories\Services\Contracts;
 
 use EscolaLms\Categories\Dtos\CategoryDto;
+use EscolaLms\Categories\Dtos\CategorySortDto;
 use EscolaLms\Categories\Models\Category;
 
 interface CategoryServiceContracts
@@ -20,4 +21,7 @@ interface CategoryServiceContracts
     public function slugify(string $name): string;
 
     public function allCategoriesAndChildrenIds(array $categoryIds): array;
+
+    public function sort(CategorySortDto $dto): void;
+
 }

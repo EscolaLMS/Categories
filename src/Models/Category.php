@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property int|null $parent_id
  * @property string|null $icon
+ * @property int $order
  * @property-read Collection|Category[] $children
  * @property-read int|null $children_count
  * @property-read Collection|Course[] $courses
@@ -60,6 +61,7 @@ class Category extends Model
         'is_active',
         'parent_id',
         'icon',
+        'order',
     ];
 
     protected $guarded = [];
@@ -108,5 +110,19 @@ class Category extends Model
             $result .= ucfirst($this->name) . '. ';
         }
         return $result;
+    }
+
+
+    protected static function booted(): void
+    {
+        static::creating(function (Category $category) {
+            if (!$category->order) {
+                $category->order = 1 + (int) Category::query()
+                        ->when($category->parent_id, function (Builder $query, int $parentId) {
+                            $query->where('parent_id', $parentId);
+                        })
+                        ->max('order');
+            }
+        });
     }
 }

@@ -3,6 +3,7 @@
 namespace EscolaLms\Categories\Services;
 
 use EscolaLms\Categories\Dtos\CategoryDto;
+use EscolaLms\Categories\Dtos\CategorySortDto;
 use EscolaLms\Categories\Enums\ConstantEnum;
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
@@ -110,6 +111,12 @@ class CategoryService implements CategoryServiceContracts
             $result = array_merge($result, array_map(fn ($cat) => $cat->id, $flat));
         }
         return $result;
+    }
+
+    public function sort(CategorySortDto $dto): void
+    {
+        foreach ($dto->getOrders() as $oder)
+            $this->categoryRepository->update(['order' => $oder['order']], $oder['id']);
     }
 
     private function saveIcon($icon, $id): string

@@ -26,63 +26,6 @@
                         }
                     }
                 }
-            },
-            "post": {
-                "tags": [
-                    "Categories"
-                ],
-                "summary": "Category create",
-                "description": "Create single Categories",
-                "operationId": "126bfa640341a4d1a45f8377efb4fb78",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Dokumentacja"
-                                    },
-                                    "description": {
-                                        "type": "string"
-                                    },
-                                    "icon_class": {
-                                        "type": "string",
-                                        "example": "fa-business-time"
-                                    },
-                                    "is_active": {
-                                        "type": "bool",
-                                        "example": "true"
-                                    },
-                                    "parent_id": {
-                                        "type": "?integer",
-                                        "example": "null"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "422": {
-                        "description": "Bad request",
-                        "content": {
-                            "application/json": {}
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
             }
         },
         "/api/categories/tree": {
@@ -108,13 +51,13 @@
                 }
             }
         },
-        "/api/categories/{id}": {
+        "/api/admin/categories/{id}": {
             "get": {
                 "tags": [
                     "Categories"
                 ],
                 "description": "Get single Categories",
-                "operationId": "707a68073fb715968f89b631d9e3502a",
+                "operationId": "f2a5df8012f6ebea14209e3374965593",
                 "parameters": [
                     {
                         "name": "id",
@@ -146,7 +89,7 @@
                 ],
                 "summary": "Update category",
                 "description": "Update single Categories",
-                "operationId": "e45496b5c4599cd66361688aa03c47b5",
+                "operationId": "bc92931a63a6a92bccf421c9965031a3",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -170,6 +113,10 @@
                                     "parent_id": {
                                         "type": "?integer",
                                         "example": "null"
+                                    },
+                                    "order": {
+                                        "type": "number",
+                                        "example": "1"
                                     }
                                 },
                                 "type": "object"
@@ -203,7 +150,7 @@
                 ],
                 "summary": "Destroy category",
                 "description": "Destroy the specified category",
-                "operationId": "8419a959f8ee2f61ff137604d2760b76",
+                "operationId": "7867cdf249d471f8b845ae16eb6fbd51",
                 "responses": {
                     "200": {
                         "description": "successful operation",
@@ -223,6 +170,141 @@
                         "passport": []
                     }
                 ]
+            }
+        },
+        "/api/admin/categories": {
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Category create",
+                "description": "Create single Categories",
+                "operationId": "64090e103b70016040d00e9b93679027",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Dokumentacja"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "icon_class": {
+                                        "type": "string",
+                                        "example": "fa-business-time"
+                                    },
+                                    "is_active": {
+                                        "type": "bool",
+                                        "example": "true"
+                                    },
+                                    "parent_id": {
+                                        "type": "?integer",
+                                        "example": "null"
+                                    },
+                                    "order": {
+                                        "type": "number",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "422": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/categories/sort": {
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "operationId": "afd0b3f37dd0a964ab514da040a615bd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminCategorySortRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AdminCategorySortRequest": {
+                "properties": {
+                    "orders": {
+                        "description": "orders",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AdminSortCategories"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "AdminSortCategories": {
+                "properties": {
+                    "id": {
+                        "description": "id",
+                        "type": "integer"
+                    },
+                    "order": {
+                        "description": "order",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
             }
         }
     }

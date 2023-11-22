@@ -31,6 +31,7 @@ class CategoryResource extends JsonResource
             'updated_at' => $this->updated_at,
             'parent_id' => $this->parent_id,
             'count' => $this->published_courses ?? 0,
+            'order' => $this->order,
         ];
     }
 }

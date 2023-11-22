@@ -10,6 +10,7 @@ use EscolaLms\Categories\Http\Requests\CategoryCreateRequest;
 use EscolaLms\Categories\Http\Requests\CategoryDeleteRequest;
 use EscolaLms\Categories\Http\Requests\CategoryListRequest;
 use EscolaLms\Categories\Http\Requests\CategoryReadRequest;
+use EscolaLms\Categories\Http\Requests\CategorySortRequest;
 use EscolaLms\Categories\Http\Requests\CategoryUpdateRequest;
 use EscolaLms\Categories\Http\Resources\CategoryResource;
 use EscolaLms\Categories\Http\Resources\CategoryTreeAdminResource;
@@ -133,5 +134,12 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
         $category = $this->categoryService->store($categoryDto);
 
         return $this->sendResponseForResource(CategoryResource::make($category), __('Category created successfully'));
+    }
+
+    public function sort(CategorySortRequest $request): JsonResponse
+    {
+        $this->categoryService->sort($request->toDto());
+
+        return $this->sendSuccess(__('Categories sorted successfully.'));
     }
 }

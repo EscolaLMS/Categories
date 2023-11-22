@@ -13,6 +13,7 @@ Route::group(['prefix' => 'api', 'middleware' => [SubstituteBindings::class]], f
 
     Route::group(['prefix' => '/admin/categories', 'middleware' => ['auth:api']], function () {
         Route::get('/', [CategoryAPIController::class, 'index']);
+        Route::post('sort', [CategoryAPIController::class, 'sort']);
         Route::get('tree', [CategoryAPIController::class, 'tree']);
         Route::get('{category}', [CategoryAPIController::class, 'show']);
         Route::post('/', [CategoryAPIController::class, 'create']);

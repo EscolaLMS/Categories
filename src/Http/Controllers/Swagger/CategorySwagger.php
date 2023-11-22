@@ -6,6 +6,7 @@ use EscolaLms\Categories\Http\Requests\CategoryCreateRequest;
 use EscolaLms\Categories\Http\Requests\CategoryDeleteRequest;
 use EscolaLms\Categories\Http\Requests\CategoryListRequest;
 use EscolaLms\Categories\Http\Requests\CategoryReadRequest;
+use EscolaLms\Categories\Http\Requests\CategorySortRequest;
 use EscolaLms\Categories\Http\Requests\CategoryUpdateRequest;
 use EscolaLms\Categories\Models\Category;
 use Illuminate\Http\JsonResponse;
@@ -62,7 +63,7 @@ interface CategorySwagger
     /**
      * @OA\Get(
      *     tags={"Categories"},
-     *      path="/api/categories/{id}",
+     *      path="/api/admin/categories/{id}",
      *      description="Get single Categories",
      *      @OA\Parameter(
      *          name="id",
@@ -93,7 +94,7 @@ interface CategorySwagger
     /**
      * @OA\Post(
      *     tags={"Categories"},
-     *     path="/api/categories",
+     *     path="/api/admin/categories",
      *     summary="Category create",
      *     description="Create single Categories",
      *     security={
@@ -125,6 +126,11 @@ interface CategorySwagger
      *                 type="?integer",
      *                 example="null",
      *             ),
+     *             @OA\Property(
+     *                 property="order",
+     *                 type="number",
+     *                 example="1"
+     *             ),
      *         )
      *     ),
      *     @OA\Response(
@@ -148,7 +154,7 @@ interface CategorySwagger
     /**
      * @OA\Post(
      *     tags={"Categories"},
-     *     path="/api/categories/{id}",
+     *     path="/api/admin/categories/{id}",
      *     summary="Update category",
      *     description="Update single Categories",
      *     security={
@@ -180,6 +186,11 @@ interface CategorySwagger
      *                 type="?integer",
      *                 example="null",
      *             ),
+     *             @OA\Property(
+     *                 property="order",
+     *                 type="number",
+     *                 example="1"
+     *             ),
      *         )
      *     ),
      *     @OA\Response(
@@ -206,7 +217,7 @@ interface CategorySwagger
      *     security={
      *         {"passport": {}},
      *     },
-     *     path="/api/categories/{id}",
+     *     path="/api/admin/categories/{id}",
      *     summary="Destroy category",
      *     description="Destroy the specified category",
      *     @OA\Response(
@@ -226,4 +237,40 @@ interface CategorySwagger
      * )
      */
     public function delete(int $id, CategoryDeleteRequest $categoryDeleteRequest): JsonResponse;
+
+    /**
+     * @OA\Post(
+     *      path="/api/admin/categories/sort",
+     *      tags={"Categories"},
+     *      security={
+     *          {"passport": {}},
+     *      },
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(ref="#/components/schemas/AdminCategorySortRequest")
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successfull operation",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="success",
+     *                      type="boolean"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="message",
+     *                      type="string"
+     *                  )
+     *              )
+     *          )
+     *      )
+     * )
+     */
+    public function sort(CategorySortRequest $request): JsonResponse;
 }

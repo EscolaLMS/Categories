@@ -28,6 +28,7 @@ class CategoryUpdateRequest extends FormRequest
             'icon' => [new FileOrStringRule(['image'], $prefixPath)],
             'icon_class' => ['nullable', 'string', 'max:255'],
             'parent_id' => ['nullable', 'exists:categories,id'],
+            'order' => ['nullable', 'integer', 'min:1'],
         ];
     }
 

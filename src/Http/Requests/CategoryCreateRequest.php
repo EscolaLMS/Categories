@@ -22,7 +22,8 @@ class CategoryCreateRequest extends FormRequest
             'is_active' => ['required', 'bool'],
             'icon' => ['nullable', 'file', 'image'],
             'icon_class' => ['nullable', 'string', 'max:255'],
-            'parent_id' => ['nullable', 'exists:categories,id']
+            'parent_id' => ['nullable', 'exists:categories,id'],
+            'order' => ['nullable', 'integer', 'min:1'],
         ];
     }
 }

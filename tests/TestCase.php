@@ -2,6 +2,7 @@
 
 namespace EscolaLms\Categories\Tests;
 
+use EscolaLms\Auth\EscolaLmsAuthServiceProvider;
 use EscolaLms\Categories\AuthServiceProvider;
 use EscolaLms\Categories\EscolaLmsCategoriesServiceProvider;
 use EscolaLms\Core\Models\User;
@@ -16,6 +17,7 @@ class TestCase extends \EscolaLms\Core\Tests\TestCase
             ...parent::getPackageProviders($app),
             PermissionServiceProvider::class,
             PassportServiceProvider::class,
+            EscolaLmsAuthServiceProvider::class,
             EscolaLmsCategoriesServiceProvider::class,
             AuthServiceProvider::class,
         ];

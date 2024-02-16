@@ -20,9 +20,7 @@ use Illuminate\Support\Facades\Gate;
  *      )
  * )
  *
- */
-
-/**
+ *
  * @OA\Schema(
  *      schema="AdminSortCategories",
  *      @OA\Property(

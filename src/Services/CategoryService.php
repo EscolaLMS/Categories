@@ -5,6 +5,7 @@ namespace EscolaLms\Categories\Services;
 use EscolaLms\Categories\Dtos\CategoryDto;
 use EscolaLms\Categories\Dtos\CategorySortDto;
 use EscolaLms\Categories\Enums\ConstantEnum;
+use EscolaLms\Categories\Exceptions\CategoryIsUsed;
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Categories\Repositories\Contracts\CategoriesRepositoryContract;
 use EscolaLms\Categories\Services\Contracts\CategoryServiceContracts;
@@ -92,9 +93,22 @@ class CategoryService implements CategoryServiceContracts
         });
     }
 
+    /**
+     * @throws CategoryIsUsed
+     */
     public function delete(int $id): void
     {
-        Category::destroy($id);
+        $category = $this->categoryRepository->get($id);
+
+        if ($category->children()->count() > 0) {
+            throw new CategoryIsUsed(__('The category has categories'));
+        }
+
+        if (class_exists(\EscolaLms\Courses\Models\Course::class) && $category->courses()->count() > 0) {
+            throw new CategoryIsUsed(__('The category is used in courses'));
+        }
+
+        $this->categoryRepository->delete($id);
     }
 
     public function getPopular(PaginationDto $pagination, PeriodDto $period): Collection

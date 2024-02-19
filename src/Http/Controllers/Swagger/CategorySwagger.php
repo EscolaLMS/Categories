@@ -70,7 +70,7 @@ interface CategorySwagger
      *          required=true,
      *          in="path",
      *          @OA\Schema(
-     *              type="string",
+     *              type="integer",
      *          ),
      *      ),
      *      @OA\Response(
@@ -160,6 +160,14 @@ interface CategorySwagger
      *     security={
      *         {"passport": {}},
      *     },
+     *     @OA\Parameter(
+     *       name="id",
+     *       required=true,
+     *       in="path",
+     *       @OA\Schema(
+     *           type="integer",
+     *        ),
+     *      ),
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             @OA\Property(
@@ -220,6 +228,14 @@ interface CategorySwagger
      *     path="/api/admin/categories/{id}",
      *     summary="Destroy category",
      *     description="Destroy the specified category",
+     *     @OA\Parameter(
+     *      name="id",
+     *      required=true,
+     *      in="path",
+     *      @OA\Schema(
+     *          type="integer",
+     *       ),
+     *     ),
      *     @OA\Response(
      *          response=200,
      *          description="successful operation",

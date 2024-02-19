@@ -108,7 +108,7 @@ class CategoryAPIController extends EscolaLmsBaseController implements CategoryS
     {
         $this->categoryService->delete($id);
 
-        return response()->json(null, 200);
+        return $this->sendSuccess(__('Category deleted successfully.'));
     }
 
     /**

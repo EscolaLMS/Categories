@@ -501,6 +501,20 @@ class CategoriesApiTest extends TestCase
         $this->assertEquals(13, $category2->refresh()->order);
     }
 
+    public function testShouldNotDeleteCategoryWhenHasCategories(): void
+    {
+        $category = Category::factory()
+            ->has(Category::factory()->count(2), 'children')
+            ->create();
+
+        $this->actingAs($this->createAdmin(), 'api')->delete('/api/admin/categories/' . $category->getKey())
+            ->assertUnprocessable()
+            ->assertJsonFragment([
+                'message' => __('The category has categories'),
+                'success' => false,
+            ]);
+    }
+
     private function createAdmin()
     {
         $user = config('auth.providers.users.model')::factory()->create();

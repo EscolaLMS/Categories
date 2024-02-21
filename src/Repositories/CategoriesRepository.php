@@ -14,6 +14,7 @@ use EscolaLms\Courses\Enum\CourseStatusEnum;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CategoriesRepositoryRepository
@@ -90,6 +91,13 @@ class CategoriesRepository extends BaseRepository implements CategoriesRepositor
         $this->applyPaginationDto($query, $pagination);
 
         return $query->get();
+    }
+
+    public function get(int $id): Category
+    {
+        $query = $this->model->newQuery();
+
+        return $query->findOrFail($id);
     }
 
     public function listAll(CategoryCriteriaFilterDto $criteriaDto, OrderDto $dto, array $columns = ['*'], ?int $perPage = 15, ?bool $isActive = null): LengthAwarePaginator

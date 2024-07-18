@@ -50,7 +50,7 @@ class CategoryService implements CategoryServiceContracts
 
     public function find(int $id)
     {
-        return Category::firstOrFail($id);
+        return Category::find($id);
     }
 
     public function store(CategoryDto $categoryDto): Category

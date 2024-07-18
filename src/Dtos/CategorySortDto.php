@@ -27,7 +27,7 @@ class CategorySortDto implements DtoContract, InstantiateFromRequest
 
     public static function instantiateFromRequest(Request $request): self
     {
-        return new static(
+        return new self(
             $request->get('orders')
         );
     }

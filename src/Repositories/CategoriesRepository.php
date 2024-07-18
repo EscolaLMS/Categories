@@ -97,7 +97,9 @@ class CategoriesRepository extends BaseRepository implements CategoriesRepositor
     {
         $query = $this->model->newQuery();
 
-        return $query->findOrFail($id);
+        /** @var Category $category */
+        $category = $query->findOrFail($id);
+        return $category;
     }
 
     public function listAll(CategoryCriteriaFilterDto $criteriaDto, OrderDto $dto, array $columns = ['*'], ?int $perPage = 15, ?bool $isActive = null): LengthAwarePaginator
@@ -122,6 +124,7 @@ class CategoriesRepository extends BaseRepository implements CategoriesRepositor
         if (class_exists(\EscolaLms\Courses\Models\Course::class)) {
             $query->withCount([
                 'courses as published_courses' => function (Builder $query) {
+                    // @phpstan-ignore-next-line
                     $query->where('status','=', CourseStatusEnum::PUBLISHED);
                 }
             ]);

@@ -48,18 +48,15 @@ class CategoryService implements CategoryServiceContracts
         return Category::paginate($paginate_count);
     }
 
-    public function find(?int $id = null)
+    public function find(int $id)
     {
-        if ($id) {
-            return Category::find($id);
-        }
-
-        return Controller::getColumnTable('categories');
+        return Category::firstOrFail($id);
     }
 
     public function store(CategoryDto $categoryDto): Category
     {
         return DB::transaction(function () use($categoryDto) {
+            /** @var Category $category */
             $category = $this->categoryRepository->create($categoryDto->toArray());
             $category->slug = $this->slugify($category->name);
 
@@ -76,6 +73,7 @@ class CategoryService implements CategoryServiceContracts
     public function update(int $id, CategoryDto $categoryDto): Category
     {
         return DB::transaction(function () use($categoryDto, $id) {
+            /** @var Category $category */
             $category = $this->categoryRepository->update($categoryDto->toArray(), $id);
             $category->slug = $this->slugify($category->name);
 

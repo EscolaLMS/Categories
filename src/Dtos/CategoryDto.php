@@ -18,7 +18,9 @@ class CategoryDto extends BaseDto implements ModelDtoContract
 
     public function model(): Category
     {
-        return Category::newModelInstance();
+        /** @var Category $category */
+        $category = Category::newModelInstance();
+        return $category;
     }
 
     public function toArray($filters = false): array

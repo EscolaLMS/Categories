@@ -10,7 +10,7 @@ interface CategoryServiceContracts
 {
     public function getList(?string $search = null);
 
-    public function find(?int $id = null);
+    public function find(int $id);
 
     public function store(CategoryDto $categoryDto): Category;
 

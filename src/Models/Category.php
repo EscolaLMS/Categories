@@ -87,6 +87,7 @@ class Category extends Model
 
     public function courses(): BelongsToMany
     {
+        // @phpstan-ignore-next-line
         return $this->belongsToMany(\EscolaLms\Courses\Models\Course::class);
     }
 

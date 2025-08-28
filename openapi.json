@@ -117,7 +117,7 @@
                                         "example": "fa-business-time"
                                     },
                                     "is_active": {
-                                        "type": "bool",
+                                        "type": "boolean",
                                         "example": "true"
                                     },
                                     "parent_id": {
@@ -217,7 +217,7 @@
                                         "example": "fa-business-time"
                                     },
                                     "is_active": {
-                                        "type": "bool",
+                                        "type": "boolean",
                                         "example": "true"
                                     },
                                     "parent_id": {
@@ -327,5 +327,11 @@
                 "type": "object"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Categories",
+            "description": "Categories"
+        }
+    ]
 }
